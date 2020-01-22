@@ -1,6 +1,7 @@
-[first-table]
 key1 = 0.1
 key2 = 1284
-
-[first-table.inner]
 key3 = "hello world"
+stepsize = 5
+beta = 1
+alpha = 1
+hamiltonian = "elliptical"

@@ -1,14 +1,10 @@
 #include <iostream>
-#include "cpptoml.h"
+#include "parameters.h"
 
 int main(int argc, char const *argv[]){
-  try {
-    std::shared_ptr<cpptoml::table> g = cpptoml::parse_file(argv[1]);
-    std::cout << (*g) << std::endl;
-  } catch (const cpptoml::parse_exception &e) {
-    std::cerr << "Failed to parse " << argv[1] << ": " << e.what() << std::endl;
-    return 1;
-  }
-
+    std::string filename = "../data/metatest.toml";
+    if (argc >= 2)
+      filename = std::string(argv[1]);
+    auto params = Parameters(filename);
   return 0;
 }

@@ -3,16 +3,17 @@ project(ITK_MPI)
 
 # Options. Turn on with 'cmake -Dmyvarname=ON'.
 option(TEST "Build all tests." OFF) # Makes boolean 'test' available.
+add_definitions(-DDEBUG)
 
 # Make PROJECT_SOURCE_DIR, PROJECT_BINARY_DIR, and PROJECT_NAME available.
-set(PROJECT_NAME Project3)
+set(PROJECT_NAME Project1)
 project(${PROJECT_NAME})
 
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O3 -Wall -fopenmp  -std=c++14 -D_GLIBCXX_PARALLEL -Wextra -Wshadow -Wfloat-equal -Wundef -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -march=native -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2")
 set(CMAKE_CXX_FLAGS_RELEASE "-g -O3 -Wall -fopenmp -std=c++14 -D_GLIBCXX_PARALLEL -Wfloat-equal -march=native -Wunreachable-code -Wshadow")
 set(CMAKE_CXX_FLAGS_UNOPTIMIZED "-g")
 
-set(include_files src/main.cpp src/metamodel.cpp src/solver.cpp src/timer.cpp)
+set(include_files src/main.cpp src/cpptoml.h src/parameters.cpp)
 set(executable_name solve)
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -42,9 +43,9 @@ endif()
 ################################
 # Normal Libraries & Executables
 ################################
-find_package(Armadillo REQUIRED)
+#find_package(Armadillo REQUIRED)
 include_directories("src")
-include_directories(${MPI_INCLUDE_PATH})
+#include_directories(${MPI_INCLUDE_PATH})
 add_library(project_lib ${include_files})
 message("${executable_name} ${include_files}")
 add_executable(${executable_name} ${include_files})
@@ -53,7 +54,7 @@ add_executable(${executable_name} ${include_files})
 # own executable. Separating out main() means you can add this library to be
 # used elsewhere.
 
-target_link_libraries(solve project_lib blas lapack -O1 armadillo -ljsoncpp)
+target_link_libraries(solve project_lib)# blas lapack -O1 armadillo -ljsoncpp)
 
 ################################
 # Testing
