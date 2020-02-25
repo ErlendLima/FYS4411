@@ -1,33 +1,36 @@
 #include "wavefunction.h"
 #include <math.h>
 #include <random>
+#include <fstream>
+#include <iostream>
+#include "macros.h"
 
-#define SQ(x) x*x
-
-inline double const distanceSQ(double* r1, double* r2, size_t dimensions);
+static inline double distanceSQ(double* r1, double* r2, size_t dimensions);
 
 Wavefunction::Wavefunction(){
-    
 }
 
-void Wavefunction::initialize(size_t nparticles, size_t ndimensions){
+Wavefunction::~Wavefunction(){
+    if (particles == nullptr)
+        return;
+
+    std::cout << "foo" << std::endl;
+    for (size_t i = 0; i < num_particles; ++i) {
+      delete particles[i];
+   }
+   std::cout << "foo" << std::endl;
+   delete particles;
+}
+
+void Wavefunction::initialize(size_t nparticles, size_t ndimensions, Initializer* initializer){
     num_particles = nparticles;
     num_dimensions = ndimensions;
 
-    
-}
-
-void Wavefunction::initializeGrid(double spread){
-    //TODO : FIX
-    auto gen = std::mt19937_64(grid_seed);
-    auto dist = std::uniform_real_distribution<double>(-1, 1);
-    double* position;
-    for (size_t i = 0; i < num_particles; ++i) {
-        position = particles[i];
-        for (size_t j = 0; j < num_dimensions; j++) {
-            position[j] = spread * dist(gen);
-        }
+    particles = new double*[num_particles];
+    for(size_t i = 0; i < num_particles; i++){
+        particles[i] = new double[num_dimensions];
     }
+    initializer->place(particles, nparticles, ndimensions);
 }
 
 /**
@@ -76,23 +79,49 @@ double Wavefunction::correlation(int i, int j) const{
     }
 }
 
-void Wavefunction::changeCandidate(int index, double *new_values) {
+inline void Wavefunction::changeCandidate(int index, double *new_values) {
   for (size_t i = 0; i < num_dimensions; ++i) {
     cache[i] = particles[index][i];
     particles[index][i] += step_length * new_values[i];
   }
 }
 
-void Wavefunction::restoreCandidate(int index) {
+inline void Wavefunction::restoreCandidate(int index) {
   for (size_t i = 0; i < num_dimensions; ++i) {
     particles[index][i] = cache[i];
   }
 }
 
 
-inline double const distanceSQ(double* r1, double* r2, size_t dimensions){
+static inline double distanceSQ(double* r1, double* r2, size_t dimensions){
     double distanceSQ = 0.0;
     for (size_t i = 0; i < dimensions; ++i)
         distanceSQ += SQ(r1[i] - r2[i]);
     return distanceSQ;
+}
+
+void Wavefunction::dump(const std::string& path){
+    // Dump xyz
+
+    std::ofstream file;
+    file.open(path);
+    file << num_particles << "\n\n";
+    for (size_t i = 0; i < num_particles; ++i) {
+        file << "C";
+        file << "\t" << particles[i][0];
+        if (num_dimensions >= 2){
+            file << "\t" << particles[i][1];
+        } else {
+            file << "\t" << "0.0";
+        }
+
+        if (num_dimensions >= 3) {
+          file << "\t" << particles[i][2];
+        } else {
+          file << "\t"
+               << "0.0";
+        }
+        file << "\n";
+    }
+    file.close();
 }

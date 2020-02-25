@@ -9,6 +9,7 @@
 enum class Hamiltonians { Spherical, Elliptical };
 enum class Sampling { BruteForce, Importance };
 enum class SamplingMode { Serial, Random };
+enum class InitialPlacement { Random, Grid, Nonoverlap};
 
 class Parameters
 {
@@ -34,6 +35,9 @@ public:
     const Hamiltonians hamiltonian   = Hamiltonians::Spherical;
     const Sampling sampling          = Sampling::BruteForce;
     const SamplingMode sampling_mode = SamplingMode::Serial;
+    const InitialPlacement placement = InitialPlacement::Random;
+    const double distance            = 1.0;
+    const double radius              = 1.0;
 
     bool hasRead(){return has_read;};
 

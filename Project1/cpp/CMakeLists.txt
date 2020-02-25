@@ -13,7 +13,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g -O3 -Wall -fopenmp  -std=c++14 -D_GLIBCXX_PARALLEL
 set(CMAKE_CXX_FLAGS_RELEASE "-g -O3 -Wall -fopenmp -std=c++14 -D_GLIBCXX_PARALLEL -Wfloat-equal -march=native -Wunreachable-code -Wshadow")
 set(CMAKE_CXX_FLAGS_UNOPTIMIZED "-g")
 
-set(include_files src/main.cpp src/cpptoml.h src/parameters.cpp)
+set(include_files src/main.cpp src/cpptoml.h src/parameters.cpp
+                  src/distribution.h src/wavefunction.cpp src/simulation.cpp src/macros.cpp)
 set(executable_name solve)
 
 if(NOT CMAKE_BUILD_TYPE)

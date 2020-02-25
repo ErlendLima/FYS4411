@@ -1,7 +1,12 @@
 key1 = 0.1
 key2 = 1284
 key3 = "hello world"
+particles = 100
+dimensions = 3
 stepsize = 5
 beta = 1
 alpha = 1
 hamiltonian = "elliptical"
+placement = "nonoverlap"
+distance = 10
+radius = 0.1

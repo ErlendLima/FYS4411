@@ -1,5 +1,14 @@
+#ifndef MACROS_H
+#define MACROS_H
+
+#include <cstdarg>
+#include <stdarg.h>
+#include <stdio.h>
+#include <iostream>
+
+void printlog(const char *fmt, ...);
 #ifdef DEBUG
-#define LOG print
+#define LOG printlog
 #define LOGD(x)                                                                \
   do {                                                                         \
     std::cerr << #x << ": " << x << std::endl;                                 \
@@ -13,18 +22,19 @@
   } while (0)
 #endif
 
-#include <cstdarg>
-#include <stdarg.h>
-#include <stdio.h>
+#define SQ(x) ((x)*(x))
 
-void print(const char *fmt, ...) {
-  char str[256];
-  va_list args;
-  va_start(args, fmt);
-  vsprintf(str, fmt, args);
-  va_end(args);
+#include <chrono>
+#define BENCHMARK(func, repeats)                                               \
+  do {                                                                         \
+    auto start = std::chrono::high_resolution_clock::now();                    \
+    for (size_t i = 0; i < repeats; i++) {                                      \
+      func;                                                                    \
+    }                                                                          \
+    auto stop = std::chrono::high_resolution_clock::now();                     \
+    auto duration =                                                            \
+        std::chrono::duration_cast<std::chrono::microseconds>(stop - start);   \
+    std::cout << "Duration of " << #func << ": " << duration.count()/repeats  << " ms"<< std::endl;         \
+  } while (0)
 
-  printf("%s\n", str);
-}
-
-#define SQ(x) x *x
+#endif /* MACROS_H */

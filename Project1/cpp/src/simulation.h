@@ -8,8 +8,8 @@
 class Simulation
 {
 public:
-    Simulation(){};
-    Simulation(std::string path);
+    //Simulation(){};
+    Simulation(const std::string& path);
     virtual ~Simulation(){};
 
     void setup();
@@ -18,7 +18,5 @@ public:
     Parameters parameters = Parameters();
     std::unique_ptr<Hamiltonian> hamiltonian;
 };
-
-
 
 #endif /* SIMULATION_H */
