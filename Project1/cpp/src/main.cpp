@@ -9,8 +9,10 @@ int main(int argc, char const *argv[]){
       filename = std::string(argv[1]);
     auto params = Parameters(filename);
     Simulation* simulation = new Simulation(filename);
+    simulation->memoryUsage();
     Wavefunction wavefunction = Wavefunction();
     simulation->setup();
-    std::cout << "foo" << std::endl;
+    simulation->run();
+    simulation->dump();
     return 0;
 }

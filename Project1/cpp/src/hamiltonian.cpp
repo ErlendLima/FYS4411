@@ -1,14 +1,13 @@
 #include "hamiltonian.h"
 
 
-double Hamiltonian::local_energy(const Wavefunction& wavefunction) const{
-    double Ek = kinetic_energy(wavefunction);
-    double Ep = potential_energy(wavefunction);
+double Hamiltonian::localEnergy(Wavefunction& wavefunction) const{
+    double Ek = kineticEnergy(wavefunction);
+    double Ep = potentialEnergy(wavefunction);
     return Ek + Ep;
 }
 
-double Hamiltonian::kinetic_energy(const Wavefunction& wavefunction) const{
-    
-    double Ek = wavefunction.laplacian();
-    return - ħ * Ek * wavefunction.omega();
+double Hamiltonian::kineticEnergy(Wavefunction& wavefunction) const{
+    double Ek = 0;//(*laplacian)(wavefunction);
+    return - hbar/(2*mass) * Ek;
 }

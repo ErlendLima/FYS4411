@@ -27,24 +27,26 @@ template <> int Metropolis::draw<int>() {
 
 bool Metropolis::step(Distribution& dist){
     // Draw the index in 0..length ensured by construction
-  int index = draw<int>();
-  // Draw the random numbers required by the distribution
-  draw(cache, dist.dimensions());
+    int index = draw<int>();
+    LOGD(index);
+    // Draw the random numbers required by the distribution
+    draw(cache, dist.dimensions());
 
-  double P_old = dist.probabilityDensity();
-  // Give the distribution the values, assigning it the job
-  // of using them correctly and restoring the old values
-  // if the change is rejected.
-  dist.changeCandidate(index, cache);
-  double P_new = dist.probabilityDensity();
+    double P_old = dist.probabilityDensity();
+    // Give the distribution the values, assigning it the job
+    // of using them correctly and restoring the old values
+    // if the change is rejected.
+    dist.changeCandidate(index, cache);
+    double P_new = dist.probabilityDensity();
 
-  double w = P_new / P_old;
+    double w = P_new / P_old;
+    LOGD(P_old);
+    LOGD(P_new);
+    LOGD(w);
 
-  if (drawTheta() <= w)
-    return true;
+    if (drawTheta() <= w)
+      return true;
 
-  dist.restoreCandidate(index);
-  return false;
+    dist.restoreCandidate(index);
+    return false;
 }
-
-

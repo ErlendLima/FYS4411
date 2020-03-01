@@ -63,6 +63,72 @@ The goal is therefore to minimize minimizing \(\sigma^{2} = \expval{E_{L}^{2}} -
 \expval{E_{L}}^{2}\) over the variational parameter \(\alpha\).
 
 \subsection{Gradient Descent}
-\subsection{Potentials}
+The optimal value for the variational parameter is found by gradient descent.
+
+\subsection{The System}
+\subsubsection{The Potentials}
+
+The Hamiltonian under investigation describes \(N\) bosons in a potential trap,
+and is on the form
+
+\begin{equation*}
+  H = \sum_{i=1}^{N}\left( \frac{-\hbar^{2}}{2m}\nabla^{2}_{i} + V_{\text{ext}}(\vb{r}_{i})\right) + \sum_{i<j}^{N}V_{\text{int}}(\vb{r}_{i}, \vb{r}_{j})
+\end{equation*}
+
+where \(V_{\text{ext}}\) is the external potential of the trap while
+\(V_{\text{int}}\) is the internal potential between the particles. 
+The external potential has an elliptical form, being anisotropic in the \(z\)-direction:
+
+\begin{equation}
+  \label{eq:2}
+  V_{\text{ext}}(\vb{r}) = \frac{1}{2}m\left( \omega\left[ x^{2} + y^{2} \right] + \omega_{z}z^{2} \right)
+\end{equation}
+
+The internal potential is a hard shell potential, being infinite for distances
+where two bosons overlap:
+
+\begin{equation*}
+  V_{\text{int}} = \begin{cases}
+    \infty, &\text{for } |r_{i} - r_{j}| \le 0\\
+    0, &\text{otherwise}
+    \end{cases}
+\end{equation*}
+
+\subsubsection{The Trial Wavefunction}
+
+The elliptical spherical trap~\eqref{eq:2} represents a harmonic oscillator. As
+the trial wavefunction should be as close as possible to the expected true
+wavefunction, a reasonable guess at its shape is then the eigenfunction of
+harmonic oscillators, namely Gaussian functions. For a \(N\)-bosonic system the
+trial wavefunction is therefore
+
+\begin{align*}
+  h(\vb{r}_{1}, \ldots, \vb{r}_{N}, \alpha, \beta) &= \prod_{i=1}^{N}g(\vb{r}_{i}, \alpha, \beta)\\
+  &= \exp{-\sum_{i=1}^{N}\left( x_{i}^{2} + y_{i}^{2}+\beta z_{i}^{2} \right)}
+\end{align*}
+with \(g\) the onebody function.
+The internal potential should cause the wavefunction to decrease continuously
+down to zero as the distance of two particles goes to zero. Once such possible
+function is
+
+\begin{equation*}
+  f(a, \vb{r}_{i}, \vb{r}_{j}) = \begin{cases}
+    0, &|\vb{r}_{i} - \vb{r}_{j}| \le a\\
+    1 - \frac{a}{\abs{r_{i}-r_{j}}}, &\text{otherwise}
+    \end{cases}
+\end{equation*}
+
+Combining both potential contributions, the complete trial wave function is
+therefore
+
+\begin{equation*}
+  \Psi_{T}(\vb{r}, \alpha, \beta, a) = \exp{-\alpha\sum_{i=1}^{N}\left( x_{i}^{2} + y^{2}_{i} + \beta z^{2}_{i} \right)}
+  \prod_{i<j}^{N}f(a, \vb{r}_{i}, \vb{r}_{j})
+\end{equation*}
+
+\subsubsection{Analytical Solutions}
+
+
+
 \subsection{Drift Force}
 \subsection{Onebody Density}

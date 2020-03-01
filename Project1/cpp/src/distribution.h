@@ -2,6 +2,7 @@
 #define DISTRIBUTION_H
 
 
+#include <cstddef>
 class Distribution
 {
 public:
@@ -10,8 +11,8 @@ public:
     virtual double probabilityDensity() const = 0;
     virtual size_t dimensions() const {return num_dimensions;}
 
-    virtual void changeCandidate(int index, double* new_values) = 0;
-    virtual void restoreCandidate(int index) = 0;
+    virtual void changeCandidate(size_t index, double* new_values) = 0;
+    virtual void restoreCandidate(size_t index) = 0;
 
 
   protected:

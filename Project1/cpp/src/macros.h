@@ -4,17 +4,25 @@
 #include <cstdarg>
 #include <stdarg.h>
 #include <stdio.h>
+#include <cstring>
 #include <iostream>
+#include <sstream>
+#define __FILENAME__                                                           \
+  (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
 
-void printlog(const char *fmt, ...);
-#ifdef DEBUG
-#define LOG printlog
+void printlog(const char* source, const char *fmt, ...);
+//void printlog(const char *fmt, ...);
+void printstamp(const char* source, const std::string&);
+#if 0
+#define LOG(...) printlog(__FILENAME__, __VA_ARGS__)
 #define LOGD(x)                                                                \
   do {                                                                         \
-    std::cerr << #x << ": " << x << std::endl;                                 \
+  std::stringstream ss;\
+    ss << #x << ": " << x;                                 \
+    printstamp(__FILENAME__, ss.str());                                  \
   } while (0)
 #else
-#define LOG(x)                                                                 \
+#define LOG(...)                                                          \
   do {                                                                         \
   } while (0)
 #define LOGD(x)                                                                \

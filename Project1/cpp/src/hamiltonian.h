@@ -3,22 +3,26 @@
 #define HAMILTONIAN_H
 
 #include "wavefunction.h"
-
+#include "laplacian.h"
 
 class Hamiltonian
 {
 public:
-    Hamiltonian(){};
-    virtual ~Hamiltonian();
+    Hamiltonian(Laplacian* lap, double m): laplacian(lap), mass(m){};
+    virtual ~Hamiltonian(){delete laplacian;};
 
     /**
        Both kinetic energy and local energy are common for
        all traps. Potential is not, and must be specified.
     */
-    virtual double kinetic_energy(const Wavefunction &) const;
-    double local_energy(const Wavefunction &) const;
+    virtual double kineticEnergy(Wavefunction &) const;
+    double localEnergy(Wavefunction &) const;
 
-    virtual double potential_energy(const Wavefunction &) const = 0;
+    virtual double potentialEnergy(const Wavefunction &) const = 0;
+protected:
+  Laplacian *laplacian;
+  const double mass = 1.0;
+  const double hbar = 1.0;
 };
 
 

@@ -10,7 +10,7 @@ template <class T> void copy_override_const(T src, const T &dst) {
 bool Parameters::read(std::string path){
   try {
     std::shared_ptr<cpptoml::table> toml = cpptoml::parse_file(path);
-    LOGD(*toml);
+    //LOGD(*toml);
     parse(toml);
     has_read = true;
   } catch (const cpptoml::parse_exception &e) {
@@ -24,20 +24,23 @@ void Parameters::parse(std::shared_ptr<cpptoml::table> toml){
     parse<double>(toml, "stepsize", stepsize);
     parse<double>(toml, "beta", beta);
     parse<double>(toml, "alpha", alpha);
-    parse<int>(toml, "dimensions", dimensions);
-    parse<int>(toml, "particles", num_particles);
+    parse<size_t>(toml, "dimensions", dimensions);
+    parse<size_t>(toml, "particles", num_particles);
     parse<bool>(toml, "mpi", use_mpi);
     parse<double>(toml, "distance", distance);
     parse<double>(toml, "radius", radius);
+    parse<size_t>(toml, "mccycles", mc_cycles);
+    parse<bool>(toml, "recordobservables", record_observables);
+    parse<size_t>(toml, "recordperiod", record_period);
 
-    auto hamil = toml->get_as<std::string>("hamiltonian").value_or("spherical");
-    LOG("Reading hamiltonian: %s", hamil.c_str());
-    if (hamil == "spherical")
-        copy_override_const(Hamiltonians::Spherical, hamiltonian);
-    else if (hamil == "elliptical")
-        copy_override_const(Hamiltonians::Elliptical, hamiltonian);
-    else
-        throw std::invalid_argument("Unsupported value for keyword 'hamiltonian'");
+    // auto hamil = toml->get_as<std::string>("hamiltonian").value_or("spherical");
+    // LOG("Reading hamiltonian: %s", hamil.c_str());
+    // if (hamil == "spherical")
+    //     copy_override_const(Hamiltonians::Spherical, hamiltonian);
+    // else if (hamil == "elliptical")
+    //     copy_override_const(Hamiltonians::Elliptical, hamiltonian);
+    // else
+    //     throw std::invalid_argument("Unsupported value for keyword 'hamiltonian'");
 
     auto init = toml->get_as<std::string>("placement").value_or("random");
     if (init == "random")

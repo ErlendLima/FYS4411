@@ -34,7 +34,7 @@ class Initializer {
     }
 
     size_t overlaps(double **const particles, size_t size, size_t dimensions,
-                    double distance, int *overlapping) {
+                    double distance, size_t *overlapping) {
       size_t k = 0;
       double sqdistance = SQ(distance);
       const double *particle;

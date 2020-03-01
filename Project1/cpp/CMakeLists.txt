@@ -14,7 +14,10 @@ set(CMAKE_CXX_FLAGS_RELEASE "-g -O3 -Wall -fopenmp -std=c++14 -D_GLIBCXX_PARALLE
 set(CMAKE_CXX_FLAGS_UNOPTIMIZED "-g")
 
 set(include_files src/main.cpp src/cpptoml.h src/parameters.cpp
-                  src/distribution.h src/wavefunction.cpp src/simulation.cpp src/macros.cpp)
+  src/distribution.h src/wavefunction.cpp src/simulation.cpp src/macros.cpp
+  src/initializer.h src/gridinitializer.cpp src/metropolis.cpp
+  src/hamiltonian.cpp src/hamiltonianelliptical.cpp src/laplaciannumerical.cpp
+  src/observable.h src/filemanager.cpp src/filemanager.h)
 set(executable_name solve)
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -78,13 +81,14 @@ if (test)
   ##############
   # Unit Tests
   ##############
-  add_executable(runUnitTests test/test.cpp)
+  #add_library(runUnitTests ${include_files})
+  add_executable(runUnitTests test/test.cpp ${include_files})
 
   # Standard linking to gtest stuff.
   target_link_libraries(runUnitTests gtest gtest_main)
 
   # # Extra linking for the project.
-  target_link_libraries(runUnitTests project_lib blas lapack -O1 armadillo -ljsoncpp)
+  #target_link_libraries(runUnitTests project_lib blas lapack -O1 armadillo -ljsoncpp)
 
   # This is so you can do 'make test' to see all your tests run, instead of
   # manually running the executable runUnitTests to see those specific tests.
@@ -93,5 +97,5 @@ if (test)
   # You can also omit NAME and COMMAND. The second argument could be some other
   # test executable.
   # add_test(that-other-test-I-made runUnitTests)
-  add_test(MetamodelTest runUnitTests)
+  add_test(Parameters, runUnitTests)
 endif()

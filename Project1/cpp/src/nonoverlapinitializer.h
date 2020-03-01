@@ -15,7 +15,7 @@ public:
 
 void NonoverlapInitializer::place(double **particles, size_t size,
                                   size_t dimensions) {
-    int overlaping[size];
+    size_t overlaping[size];
     size_t counter = 0;
     do{
         RandomInitializer::place(particles, size, dimensions);

@@ -5,8 +5,6 @@
 #include "cpptoml.h"
 #include <string>
 
-
-enum class Hamiltonians { Spherical, Elliptical };
 enum class Sampling { BruteForce, Importance };
 enum class SamplingMode { Serial, Random };
 enum class InitialPlacement { Random, Grid, Nonoverlap};
@@ -28,16 +26,18 @@ public:
     const double stepsize            = 0.5;
     const double beta                = 1.0;
     const double alpha               = 1.0;
-    const int dimensions             = 1;
-    const int num_particles          = 10;
+    const size_t dimensions          = 1;
+    const size_t num_particles       = 10;
     const int sample_rate            = 100;
     const bool use_mpi               = false;
-    const Hamiltonians hamiltonian   = Hamiltonians::Spherical;
     const Sampling sampling          = Sampling::BruteForce;
     const SamplingMode sampling_mode = SamplingMode::Serial;
     const InitialPlacement placement = InitialPlacement::Random;
     const double distance            = 1.0;
     const double radius              = 1.0;
+    const size_t mc_cycles           = 10;
+    const bool record_observables    = false;
+    const size_t record_period       = 10;
 
     bool hasRead(){return has_read;};
 
