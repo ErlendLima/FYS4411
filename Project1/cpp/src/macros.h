@@ -15,22 +15,25 @@ void printlog(const char* source, const char *fmt, ...);
 void printstamp(const char* source, const std::string&);
 #if 0
 #define LOG(...) printlog(__FILENAME__, __VA_ARGS__)
-#define LOGD(x)                                                                \
-  do {                                                                         \
-  std::stringstream ss;\
-    ss << #x << ": " << x;                                 \
-    printstamp(__FILENAME__, ss.str());                                  \
-  } while (0)
+#define LOGD(x)                                                         \
+    do {                                                                \
+        std::stringstream ss;                                           \
+        ss << #x << ": " << x;                                          \
+        printstamp(__FILENAME__, ss.str());                             \
+    } while (0)
 #else
-#define LOG(...)                                                          \
-  do {                                                                         \
-  } while (0)
-#define LOGD(x)                                                                \
-  do {                                                                         \
-  } while (0)
+#define LOG(...)                                                        \
+    do {                                                                \
+    } while (0)
+#define LOGD(x)                                                         \
+    do {                                                                \
+    } while (0)
 #endif
+//#define SQ(x) ((x)*(x))
+template <typename T>
+T SQ(T x){return x*x;};
 
-#define SQ(x) ((x)*(x))
+//#define EXPAND(expr, dim)
 
 #include <chrono>
 #define BENCHMARK(func, repeats)                                               \

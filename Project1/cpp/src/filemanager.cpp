@@ -19,7 +19,10 @@ void FileManager::dumpAll() const{
     for(auto observable : observables){
         observable->dump(path);
         auto table = cpptoml::make_table();
-        table->insert("shape", observable->size);
+        auto shape = cpptoml::make_array();
+        for(auto s: observable->getShape())
+            shape->push_back(s);
+        table->insert("shape", shape);
         table->insert("path", observable->fname);
         table->insert("type", observable->getType());
         root->insert(observable->name, table);

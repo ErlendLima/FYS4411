@@ -16,12 +16,18 @@ class LaplacianNumerical : public Laplacian
 public:
     double operator()(Wavefunction&) override;
 protected:
-    // Step size
-     double h = 1e-17;
+    // Spacing
+    //double h = 1e-14;
+    const double h = 1e-4;
 };
 
 class LaplacianAnalytical : public Laplacian {
 public:
   double operator()( Wavefunction &) override;
+};
+
+class LaplacianAnalyticalNonInteracting : public Laplacian {
+public:
+    double operator()(Wavefunction &) override;
 };
 #endif /* LAPLACIAN_H */

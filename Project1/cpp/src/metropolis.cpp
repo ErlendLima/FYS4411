@@ -39,7 +39,8 @@ bool Metropolis::step(Distribution& dist){
     dist.changeCandidate(index, cache);
     double P_new = dist.probabilityDensity();
 
-    double w = P_new / P_old;
+    //double w = P_new / P_old;
+    double w = dist.probabilityRatio();
     LOGD(P_old);
     LOGD(P_new);
     LOGD(w);
