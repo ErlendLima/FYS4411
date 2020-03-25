@@ -21,17 +21,20 @@ bool Parameters::read(std::string path){
 }
 
 void Parameters::parse(std::shared_ptr<cpptoml::table> toml){
-    parse<double>(toml, "stepsize", stepsize);
-    parse<double>(toml, "beta", beta);
-    parse<double>(toml, "alpha", alpha);
-    parse<size_t>(toml, "dimensions", dimensions);
-    parse<size_t>(toml, "particles", num_particles);
-    parse<bool>(toml, "mpi", use_mpi);
-    parse<double>(toml, "distance", distance);
-    parse<double>(toml, "radius", radius);
-    parse<size_t>(toml, "mccycles", mc_cycles);
-    parse<bool>(toml, "recordobservables", record_observables);
-    parse<size_t>(toml, "recordperiod", record_period);
+    parseQualified<double>(toml, "system.stepsize",          stepsize);
+    parseQualified<double>(toml, "external.beta",              beta);
+    parseQualified<size_t>(toml, "system.dimensions",        dimensions);
+    parseQualified<size_t>(toml, "system.particles",         num_particles);
+    //parseQualified<bool>  (toml, "system.pi",               use_mpi);
+    parseQualified<double>(toml, "internal.radius",            radius);
+    parseQualified<size_t>(toml, "system.mccycles",          mc_cycles);
+    parseQualified<double>(toml, "external.omega_ho",          omega_ho);
+    parseQualified<double>(toml, "external.omega_z",           omega_z);
+    parseQualified<bool>  (toml, "system.laplacian_numerical", laplacian_numerical);
+    parseQualified<bool>  (toml, "system.verbose",           verbose);
+    parseQualified<bool>  (toml, "record.dorecord", record_observables);
+    parseQualified<size_t>(toml, "record.period",   record_period);
+    parseQualified<double>(toml, "placement.distance", distance);
 
     // auto hamil = toml->get_as<std::string>("hamiltonian").value_or("spherical");
     // LOG("Reading hamiltonian: %s", hamil.c_str());
@@ -42,7 +45,7 @@ void Parameters::parse(std::shared_ptr<cpptoml::table> toml){
     // else
     //     throw std::invalid_argument("Unsupported value for keyword 'hamiltonian'");
 
-    auto init = toml->get_as<std::string>("placement").value_or("random");
+    auto init = toml->get_qualified_as<std::string>("placement.type").value_or("random");
     if (init == "random")
         copy_override_const(InitialPlacement::Random, placement);
     else if (init == "grid")
@@ -51,6 +54,22 @@ void Parameters::parse(std::shared_ptr<cpptoml::table> toml){
         copy_override_const(InitialPlacement::Nonoverlap, placement);
     else
         throw std::invalid_argument("Unsupported value for keyword 'placement'");
+
+
+    // Alpha
+    double initial = toml->get_qualified_as<double>("alpha.initial").value_or(1.0);
+    std::string method = toml->get_qualified_as<std::string>("alpha.method").value_or("single");
+    if (method == "single"){
+        alphas = new AlphaSingle(initial);
+    } else if (method == "grid") {
+        double stop = toml->get_qualified_as<double>("alpha.grid.stop").value_or(1.0);
+        double step = toml->get_qualified_as<double>("alpha.grid.step").value_or(0.1);
+        alphas = new AlphaGrid(initial, stop, step);
+    } else if (method == "gradient descent") {
+        
+    } else {
+        throw std::invalid_argument("Unsupported value for keyword 'method'");
+    }
 }
 
 template <class T>
@@ -59,5 +78,14 @@ void Parameters::parse(std::shared_ptr<cpptoml::table> toml, const std::string& 
     copy_override_const<T>(val.value_or(var), var);
     if (val){
         LOG("Reading %s: %g", name.c_str(), var);
+    }
+}
+
+template <class T>
+void Parameters::parseQualified(std::shared_ptr<cpptoml::table> toml, const std::string& name, const T& var){
+    auto val = toml->get_qualified_as<T>(name);
+    copy_override_const<T>(val.value_or(var), var);
+    if (val){
+        LOG("Reading qualified %s: %g", name.c_str(), var);
     }
 }

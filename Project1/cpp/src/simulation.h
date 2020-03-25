@@ -7,6 +7,7 @@
 #include "metropolis.h"
 #include "observable.h"
 #include "parameters.h"
+#include "alphasearch.h"
 #include <memory.h>
 
 class Simulation
@@ -17,12 +18,16 @@ public:
     virtual ~Simulation();
 
     void setup();
-    Wavefunction makeWavefunction();
+    Wavefunction* makeWavefunction(double alpha);
     void thermalize();
     void run();
+    void run(AlphaSearch*);
+    void run(double alpha);
+    void resetObservables();
 
     void memoryUsage() const noexcept;
     void dump() const {filemanager.dumpAll();};
+    void setWavefunction(Wavefunction*);
 
     Parameters parameters = Parameters();
 private:
@@ -31,6 +36,13 @@ private:
     Metropolis metropolis;
     FileManager filemanager = FileManager("../data");
     Observable<double>* local_energies;
+    Observable<double>* kinetic_energy;
+    Observable<double>* potential_energy;
+    Observable<double>* energies;
+    Observable<double>* position;
+    Wavefunction* wavefunction;
+    double mean_Ek = 0;
+    double mean_Ep = 0;
 };
 
 #endif /* SIMULATION_H */

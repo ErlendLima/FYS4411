@@ -98,7 +98,7 @@ where two bosons overlap:
 
 The elliptical spherical trap~\eqref{eq:2} represents a harmonic oscillator. As
 the trial wavefunction should be as close as possible to the expected true
-wavefunction, a reasonable guess at its shape is then the eigenfunction of
+wavefunction, a reasonable guess at its shape is the eigenfunction of
 harmonic oscillators, namely Gaussian functions. For a \(N\)-bosonic system the
 trial wavefunction is therefore
 
@@ -126,7 +126,50 @@ therefore
   \prod_{i<j}^{N}f(a, \vb{r}_{i}, \vb{r}_{j})
 \end{equation*}
 
-\subsubsection{Analytical Solutions}
+\subsubsection{Non-interacting Case}
+For non-interacting bosons in a spherical with \(\beta = 1\) and \(a = 0\) the
+system reduces to spherical harmonic oscillators where analytical solutions are
+available. The trial wavefunction reduces to simply the product of one body
+elements
+
+\newcommand{\psit}{\Psi_T(\vb{r})}
+\newcommand{\onebody}{\prod_{i}^{N}\exp{-\alpha\left[\left( x_i^2 + y_i^2 + \beta
+      z_i^2\right)\right]}}
+\begin{align*}
+  \psit = \prod_{i}^{N}\exp[-\alpha\left( x_{i}^{2}+y_{i}^{2}+z_{i}^{2} \right)] = \prod_{i}^{N}\exp(-\alpha \abs{r_{i}}^{2})
+\end{align*}
+
+while the Hamiltonian reduces to
+
+\begin{align*}
+  H = \sum_{i}^{N} \frac{-\hbar^{2}}{2m}\nabla_{i}^{2} + \frac{1}{2}m\omega^{2}r_{i}^{2}
+\end{align*}
+
+which in natural units is
+
+\newcommand{\lapl}[1]{\nabla_{#1}^2}
+\begin{align*}
+  H = \frac{1}{2}\sum_{i}^{N} -\frac{1}{m}\lapl{i} + m\omega^{2}r_{i}^{2}
+\end{align*}
+
+Applying the Hamiltonian gives the local energy as
+
+\begin{align*}
+  E_{L} = \frac{\alpha d}{m} N + \left( \frac{1}{2}m\omega^{2} - \frac{2\alpha^{2}}{m} \right)\sum_{i}^{N}r_{i}^{2}
+\end{align*}
+ where \(d\) is the dimension. As the factor \(\sum r_{i}^{2}\) is always
+ positive, its term should be minimized, which is accomplished by setting
+ \(\alpha = \frac{m\omega}{2}\), giving a minimal local energy of
+
+ \begin{align*}
+   E_{L} = \frac{\omega d N}{2}
+   \end{align*}
+
+\subsubsection{Interacting Case}
+The local energy for the full interacting case is much more complicated. The
+full computation is deferred to appendix~\ref{appendix:le}.
+
+
 
 
 

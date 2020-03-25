@@ -20,5 +20,8 @@ double LaplacianNumerical::operator()(Wavefunction& wf){
             sum += (forward - 2*middle + backward)/(h*h);
         }
     }
+    // -= 2*d*N*middle ?
+    //sum /= h*h*middle;
+    //evaluate
     return sum/middle;
 }

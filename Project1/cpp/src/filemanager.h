@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include <vector>
 #include "observable.h"
 #include "cpptoml.h"
@@ -19,6 +20,10 @@ public:
     void dumpAll() const;
     template <class T>
     void add(Observable<T> *observable){
+        for(auto ptr: observables){
+            if (ptr == observable)
+                throw std::runtime_error("Tried adding same observable twice");
+        }
         observables.push_back((AObservable *)observable);
     }
 private:

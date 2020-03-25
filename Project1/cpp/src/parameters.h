@@ -3,7 +3,9 @@
 #define PARAMETERS_H
 
 #include "cpptoml.h"
+#include "alphasearch.h"
 #include <string>
+
 
 enum class Sampling { BruteForce, Importance };
 enum class SamplingMode { Serial, Random };
@@ -25,7 +27,6 @@ public:
      */
     const double stepsize            = 0.5;
     const double beta                = 1.0;
-    const double alpha               = 1.0;
     const size_t dimensions          = 1;
     const size_t num_particles       = 10;
     const int sample_rate            = 100;
@@ -38,6 +39,11 @@ public:
     const size_t mc_cycles           = 10;
     const bool record_observables    = false;
     const size_t record_period       = 10;
+    const double omega_ho            = 1.0;
+    const double omega_z             = 1.0;
+    const bool laplacian_numerical   = false;
+    const bool verbose               = true;
+    AlphaSearch* alphas;
 
     bool hasRead(){return has_read;};
 
@@ -46,6 +52,9 @@ private:
     template <class T>
     void parse(std::shared_ptr<cpptoml::table> toml,
                const std::string &name, const T &var);
+    template <class T>
+    void parseQualified(std::shared_ptr<cpptoml::table>,
+                        const std::string&, const T&);
     bool has_read = false;
 };
 
