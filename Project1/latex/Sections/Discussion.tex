@@ -1,16 +1,17 @@
 \section{Results and Discussion}\label{sec:Discussion}
 \subsection{Sampling of States using Metropolis}
 
-\begin{figure}
-	\begin{subfigure}{\textwidth}
+\begin{figure}[ht]
+	\begin{subfigure}{\columnwidth}
 		\centering
-		\includegraphics[width=.8\linewidth]{figures/density1.pdf}
+		\includegraphics[]{figures/density1.pdf}
 		\subcaption{Approximation of onebody density using Metropolis brute force sampling vs analytical(kilde)}
 		\label{fig:sfig1}
 	\end{subfigure}%
-	\begin{subfigure}{\textwidth}
+	\begin{subfigure}{\columnwidth}
 		\centering
-		\includegraphics[width=.8\linewidth]{figures/density2.pdf}
+		%\includegraphics[width=.8\linewidth]{figures/density2.pdf}
+		\includegraphics[]{figures/density2.pdf}
 		\subcaption{Approximation of onebody density using Metropolis importance sampling vs analytical}
 		\label{fig:sfig2}
 	\end{subfigure}
@@ -18,16 +19,16 @@
 	\label{fig:1 part 1 dim density}
 \end{figure}
 
-\begin{figure}
-	\begin{subfigure}{\textwidth}
+\begin{figure}[ht]
+	\begin{subfigure}{\columnwidth}
 		\centering
-		\includegraphics[width=.8\linewidth]{figures/density3.pdf}
+		\includegraphics[]{figures/density3.pdf}
 		\subcaption{Approximation of radial onebody density using Metropolis brute force sampling vs analytical}
 		\label{fig:sfig1}
 	\end{subfigure}%
-	\begin{subfigure}{\textwidth}
+	\begin{subfigure}{\columnwidth}
 		\centering
-		\includegraphics[width=.8\linewidth]{figures/density4.pdf}
+		\includegraphics[]{figures/density4.pdf}
 		\subcaption{Approximation of radial onebody density using Metropolis importance sampling vs analytical}
 		\label{fig:sfig2}
 	\end{subfigure}
@@ -68,11 +69,11 @@ In \autoref{fig:blocking1}, we see the effect of applying blocking on the local 
 	\begin{tabular}{lclclclc}
 		\hline
 		\hline
-		dt & \langle E \rangle & blocking strength$\\
+      dt & \(\langle E \rangle \)& blocking strength\\
 		\hline
-		0.5 & 68.009 \pm 0.044 & 11\\
-		1 & 68.039 \pm 0.035 & 10\\
-		2 & 67.942 \pm 0.050 & 11\\
+		0.5 & \(68.009 \pm 0.044\) & 11\\
+		1 & \(68.039 \pm 0.035\) & 10\\
+		2 & \(67.942 \pm 0.050\) & 11\\
 		\hline
 	\end{tabular}
 	\caption{Estimate of energy $\langle E \rangle$ for 40 particles, $\alpha = 0.3$, $\omega = 1$}
@@ -166,11 +167,11 @@ For the non-interacting case, the interacting model was used to produce the samp
 	\begin{tabular}{lclclclc}
 		\hline
 		\hline
-		Bosons & \langle E \rangle & optimal $\alpha$\\
+		Bosons & \(\langle E \rangle\) & optimal $\alpha$\\
 		\hline
-		10 & 24.3985 \pm 0.0011 & 0.49752\\
-		50 & 127.37 \pm 0.035 & 0.48903\\
-		100 & 265.69 \pm 0.27 & 0.48160\\
+		10 & \(24.3985 \pm 0.0011\) & 0.49752\\
+		50 & \(127.37 \pm 0.035\) & 0.48903\\
+		100 & \(265.69 \pm 0.27\) & 0.48160\\
 		\hline
 	\end{tabular}
 	\caption{Estimate of energy $\langle E \rangle$ for 10, 50 and 100 particles in elliptical potential. $\beta = \gamma = 2.8284$. $N = 2^20$ cycles per thread, of $12$ threads. Importance sampling with a step length $0.5$ was used. Gradient decent was used to optimize $\alpha$}
