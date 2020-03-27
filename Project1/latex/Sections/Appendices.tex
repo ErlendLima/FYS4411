@@ -1,0 +1,145 @@
+\appendix
+\section{Local Energy}\label{appendix:le}
+\subsection{The Gradient and Laplacian}
+
+The full trial wavefunction can be written as
+
+\begin{align*}
+  \psit = \prod_{i}^{N}\phi(\vb{r}_{i}) \cdot \exp\left( \sum_{j<k}u(r_{jk}) \right)
+\end{align*}
+where \(u = \ln f(r_{ij})\) and \(r_{ij} = \abs{\vb{r}_{i} - \vb{r}_{j}}\).
+
+By the chain rule we can focus on each factor separately when taking the
+gradient. The gradient of the first factor is simply the gradient of the one
+body element in question:
+
+\begin{align*}
+  \nabla_{k} \prod_{i}\phi_{i} = \prod_{i\neq j} \phi_{i} \cdot \nabla_{k}\phi_{k}
+\end{align*}
+
+The second factor is at face value slightly more arduous, but it is trivial. The
+summation is just a notational trick to ensure that each interaction between all
+particles are enumerated once and only once. As the gradient only affects
+particle \(k\), only the interactions involving it will be non-zero. Hence the
+gradient is
+
+\begin{align*}
+  \nabla_{k} \exp\left( \sum_{j<m}u(r_{jm}) \right)
+  &= \exp\left( \sum_{j<m}u(r_{jm}) \right)\sum_{l\neq k} \nabla_{k} u(r_{lk})
+\end{align*}
+
+The total gradient of the trial wavefunction is therefore
+\newcommand{\tikzcircle}[2][red,fill=red]{\tikz[baseline=-0.5ex]\draw[#1,radius=#2] (0,0) circle ;}%
+\begin{align*}
+  \nabla_{k}\psit &=\left[\underbrace{\prod_{i\neq k} \phi_{i} \cdot \nabla_{k}\phi_{k}}_{\tikzcircle{2pt}} + 
+  \underbrace{\prod_{i}\phi_{i}\sum_{l\neq k} \nabla_{k} u(r_{lk})}_{\tikzcircle[green, fill=green]{2pt}}\right]\\
+  &\times\exp\left( \sum_{j<m}u(r_{jm}) \right)\\
+  &= \left[ \frac{\nabla_{k}\phi_{k}}{\phi_{k}} + \sum_{l\neq k}\nabla_{k}u(r_{lk})\right]\psit
+  \numberthis\label{eq:ap3}
+\end{align*}
+
+The Laplacian is likewise computed termwise
+\begin{align*}
+  \nabla_{k}^{2} \tikzcircle{2pt} &= \left[\nabla_{k}^{2}\phi\prod_{i\neq k}\phi_{i} + \nabla_{k}\phi\sum_{i\neq k}\nabla_{k}u\left( r_{ki} \right)\right]\exp\left( \sum_{j<m}u(r_{jm}) \right)
+\end{align*}
+and
+
+\begin{align*}
+  \nabla_{k}^{2}\tikzcircle[green, fill=green]{2pt}
+  &=\bigg[ \nabla_{k}\phi_{k}\prod_{i\neq k}\phi_{i} \sum_{l\neq l}\nabla_{k}u(r_{lk})\\
+  &+ \prod_{i}\phi_{i}\left( \sum_{l\neq k}\nabla_{k}u\left(r_{lk}\right) \right)^{2}\\
+  &+ \prod_{i}\phi_{i}\sum_{l\neq k}\nabla_{k}^{2}u\left( r_{lk} \right)\bigg] \exp\left( \sum_{j<m}u(r_{jm}) \right)
+\end{align*}
+
+Combining the results and diving through by \(\Psi_{T}\) then gives
+
+\begin{align*}
+  \frac{\nabla_{k}^{2}(\tikzcircle{2pt} + \tikzcircle[green, fill=green]{2pt})}{\Psi_{T}}
+  &= \frac{\nabla_{k}^{2}\phi_{k}}{\phi_{k}} + \frac{\nabla_{k}\phi_{k}}{\phi_{k}}\sum_{l\neq k}\nabla_{k}u(r_{lk})
+    + \frac{\nabla_{k}\phi_{k}}{\phi_{k}}\sum_{l\neq k}\nabla_{k}u\left( r_{lk} \right)\\
+  &+ \left[ \sum_{l \neq k}\nabla_{k}u\left( r_{lk} \right) \right]^{2} + \sum_{l\neq k}\nabla^{2}_{k}u\left( r_{lk} \right)
+    \numberthis\label{eq:ap1}
+\end{align*}
+
+To compute \(\nabla_{k} u\left( r_{lk} \right)\), a change of variable is
+performed, with
+
+\begin{align*}
+  \nabla_{k} &= \nabla_{k}\left( r_{kl} \right)\pdv{r_{kl}} = \frac{\vb{r}_{k}-\vb{r}_{l}}{r_{kl}}\pdv{r_{kl}}
+\end{align*}
+and
+\begin{align*}
+  \nabla_{k}\left( \frac{\vb{r}_{k}-\vb{r}_{l}}{r_{kl}} \right)
+  &= \frac{r_{kl}\nabla_{k}\left( \vb{r}_{k} - \vb{r}_{l}\right) -
+  \left( \vb{r}_{k} - \vb{r}_{l} \right)\nabla_{k}r_{kl}}{r_{kl}^{2}}\\
+  &= \frac{dr_{kl}^{2} - \left(\vb{r}_{k}  - \vb{r}_{l}\right)\left( \vb{r}_{l}-\vb{r}_{k} \right)}{r_{kl}^{3}}\\
+  &= \frac{dr_{kl}^{2} - \vb{r}_{k}^{2} - \vb{r}_{l}^{2} + 2\vb{r}_{k}\vb{r}_{l}}{r_{kl}^{3}}\\
+  &= \frac{d-1}{r_{kl}}
+\end{align*}
+
+Applying these relations on~\eqref{eq:ap1} and multiplying out the squared sum,
+we obtain the desired result
+
+\begin{align*}
+  \frac{\nabla_{k}^{2}\psit}{\psit}
+  &= \frac{\nabla_{k}^{2}\phi_{k}}{\phi_{k}} + 2 \frac{\nabla_{k}\phi_{k}}{\phi_{k}}\left( \sum_{l\neq k} \frac{\vb{r}_{k}-\vb{r}_{l}}{r_{kl}}u^{\prime}\left( r_{kl} \right) \right)\\
+  &+ \sum_{i\neq k}\sum_{j\neq k}\frac{\left( \vb{r}_{k}-\vb{r}_{i} \right)\left( \vb{r}_{k} -\vb{r}_{j} \right)}{r_{ki}r_{kj}}u^{\prime}\left( r_{ki} \right)u^{\prime}\left( r_{kj} \right)\\
+  &+ \sum_{l\neq k} \left( u^{\prime\prime}\left( r_{kl} \right)  + \frac{2}{r_{kl}}u^{\prime}(r_{kl})\right)
+    \numberthis\label{eq:ap2}
+\end{align*}
+
+The full expression involves computing each gradient and derivative. These are
+found to be
+
+\newcommand{\uveci}{{\bm{\hat{\textnormal{\bfseries\i}}}}}
+\newcommand{\uvecj}{{\bm{\hat{\textnormal{\bfseries\j}}}}}
+\DeclareRobustCommand{\uvec}[1]{{%
+    \ifcsname uvec#1\endcsname
+    \csname uvec#1\endcsname
+    \else
+    \bm{\hat{\mathbf{#1}}}%
+    \fi
+  }}
+\begin{align*}
+  \nabla_{k}\phi_{k} &= -2\alpha\left( x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k} \right)\phi_{k}\\
+  \nabla_{k}^{2}\phi_{k} &= \left[ 4\alpha^{2}\left(  x_{k}^{2}\uvec{i} + y_{k}^{2}\uvec{j} + \beta^{2} z_{k}^{2}\uvec{k}  \right) - 2\alpha(d - 1 + \beta) \right]\phi_{k}\\
+  u^{\prime}(r_{ij}) &= \frac{a}{r_{ij}\left(r_{ij} - a\right)}\\
+  u^{\prime\prime}(r_{ij}) &= \frac{a^{2} - 2ar_{ij}}{r_{ij}^{2}\left(r_{ij} - a\right)^{2}}\\
+\end{align*}
+\subsection{The Local Energy}
+
+The local energy for the full dimensional interactive case is found by
+using~\eqref{eq:ap2} and gradients in
+\begin{align*}
+  E_{L} = \frac{1}{\psit}H\psit
+\end{align*}
+giving
+\begin{align*}
+  E_{L} &= -\frac{1}{2m}\sum_{i}\bigg[4\alpha^{2}\left(  x_{k}^{2}\uvec{i} + y_{k}^{2}\uvec{j} + \beta^{2} z_{k}^{2}\uvec{k}  \right)\\
+          &-2\alpha(d-1+\beta)\\
+        &- 4\alpha\left(  x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k}  \right)
+          \sum_{l\neq k} \frac{\vb{r}_{k}-\vb{r}_{l}}{r_{kl}}u^{\prime}\left( r_{kl} \right)\\
+        &+ \sum_{i\neq k}\sum_{j\neq k}\frac{\left( \vb{r}_{k}-\vb{r}_{i} \right)\left( \vb{r}_{k} -\vb{r}_{j} \right)}{r_{ki}r_{kj}}u^{\prime}\left( r_{ki} \right)u^{\prime}\left( r_{kj} \right)\\
+        &+ \sum_{l\neq k} \left( u^{\prime\prime}\left( r_{kl} \right)  + \frac{2}{r_{kl}}u^{\prime}(r_{kl})\right)\bigg]\\
+        &+ \sum_{i}V_{\text{ext}}(\vb{r}_{i}) + \sum_{i<j}V_{\text{int}}\left( \vb{r}_{i}, \vb{r}_{i} \right)
+\end{align*}
+\subsection{The Drift Force}
+The drift force can likewise be found by inserting the expression for the
+gradient~\eqref{eq:ap3} into
+
+\begin{align*}
+  \vb{F}_{k} = 2\frac{1}{\psit}\nabla_{k}\psit
+\end{align*}
+giving
+\begin{align*}
+  \vb{F}_{k} &= 2 \frac{\nabla_{k}\phi_{k}}{\phi_{k}} + 2\sum_{i\neq k}\frac{\vb{r}_{k}-\vb{r}_{i}}{r_{ki}}u^{\prime}\left( r_{kj} \right)\\
+             &= -4\alpha\left(   x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k}   \right) + 2\sum_{i\neq k} \frac{\vb{r}_{k}-\vb{r}_{i}}{r_{ki}}u^{\prime}\left( r_{kj} \right)\\
+\end{align*}
+In the non-interactive case this reduces to
+\begin{align*}
+  \vb{F}_{k} &= -4\alpha\left(   x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k}   \right)
+\end{align*}
+
+
+
+\section{Dimensionless Hamiltonian}\label{appendix:dimhamiltonian}
