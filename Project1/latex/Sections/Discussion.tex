@@ -68,11 +68,11 @@ In \autoref{fig:blocking1}, we see the effect of applying blocking on the local 
 	\begin{tabular}{lclclclc}
 		\hline
 		\hline
-		N & \langle E \rangle & optimal $\alpha$\\
+		dt & \langle E \rangle & blocking strength$\\
 		\hline
-		10 & 68.009 \pm 0.044 & 68\\
-		50 & 68.039 \pm 0.035 & 68\\
-		100 & 67.942 \pm 0.050 & 68\\
+		0.5 & 68.009 \pm 0.044 & 11\\
+		1 & 68.039 \pm 0.035 & 10\\
+		2 & 67.942 \pm 0.050 & 11\\
 		\hline
 	\end{tabular}
 	\caption{Estimate of energy $\langle E \rangle$ for 40 particles, $\alpha = 0.3$, $\omega = 1$}
@@ -161,6 +161,52 @@ For the non-interacting case, the interacting model was used to produce the samp
 \autoref{fig:gd} shows the result of gradient descent used to minimize the estimated energy $\langle E \rangle$ with respect to $\alpha$. For the non-interacting case, the method converges to $\alpha = 0.5$, which we know to be the analytical value for the exact wave function. This establish confidence that the method of gradient decent also yields the optimal $\alpha$ for the interacting case, where a analytical solution is not known. 
 
 \subsection{Interacting Bosons in Elliptical Potential}
+
+\begin{table}[t]
+	\begin{tabular}{lclclclc}
+		\hline
+		\hline
+		Bosons & \langle E \rangle & optimal $\alpha$\\
+		\hline
+		10 & 24.3985 \pm 0.0011 & 0.49752\\
+		50 & 127.37 \pm 0.035 & 0.48903\\
+		100 & 265.69 \pm 0.27 & 0.48160\\
+		\hline
+	\end{tabular}
+	\caption{Estimate of energy $\langle E \rangle$ for 10, 50 and 100 particles in elliptical potential. $\beta = \gamma = 2.8284$. $N = 2^20$ cycles per thread, of $12$ threads. Importance sampling with a step length $0.5$ was used. Gradient decent was used to optimize $\alpha$}
+	\label{tab:energies}
+\end{table}
+
+\begin{figure}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/density10.pdf}
+		\subcaption{Radial onebody density for $10$ bosons in elliptical trap, interacting and non-interacting case}
+	\end{subfigure}%
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/density50.pdf}
+		\subcaption{Radial onebody density for $50$ bosons in elliptical trap, interacting and non-interacting case}
+	\end{subfigure}%
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includegraphics[width=.8\linewidth]{figures/density100.pdf}
+		\subcaption{Radial onebody density for $100$ bosons in elliptical trap, interacting and non-interacting case}
+	\end{subfigure}%
+	\centering
+	\caption{Comparison of the radial onebody density for interacting and non-interacting bosons. The hardshell radius of in the interacting case is $a = 0.0043$. The elliptical potential is defined by $\beta = \gamma =  2.82843$. }
+	\label{fig:ellipticalOnebodyDensity}
+\end{figure}
+
+\autoref{tab:energies} presents the estimated ground state energies for $10$, $50$ and $100$ interacting bosons confined by a elliptical potential. The optimal value for $\alpha$ was found using gradient decent. Notice that the optimal value is decreasing with the number of particles in the interacting case, whereas it is analytically $\alpha = 0.5$ in the non-interacting case for any number of particles. A smaller value of $\alpha$ indicates the onebody exponential functions widens, resulting in a wider distribution of particles. This makes sense, as hardshell bosons interact repulsively. Therefore, the more particles, the more energetically favorable is it to spread out. This is consistent with the 1D result presented in \autoref{fig:ellipticalOnebodyDensity}. As the number of particles increase, the radial onebody density tends to migrate outward with respect to the non-interacting system. 
+
+The ground state energy was most accurately calculated for $10$ bosons. This is because, as discussed earlier, data tend to be less correlated for smaller systems. To get a accurat estimate for larger systems, a increase in the number of cycles is appropriate. However, because of limited computer power, this was neglected. 
+
+A comment on the interpretation of the error presented in \autoref{tab:energies} is appropriate:
+The error is an estimate of the statistical error in the estimated ground state energy introduced by the Monte-Carlo simulation. It does not account for possible error introduced in the estimation of $\alpha$ that minimizes the energy. This is much harder to quantity, and is possibly large in the case for $50$ and $100$ particles, as the gradient was hard to estimate consistently. Furthermore, the error does not in any way establish a confidence interval for the true ground state value of the Hamiltonian we are investigating, which is harder still to quantify. Our estimate a approximate minimum only in the subspace spanned by out trial wave function, which is hopefully, somewhat close the exact solution of the system.
+
+
+
 
 
 
