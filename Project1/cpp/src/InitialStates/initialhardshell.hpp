@@ -5,6 +5,6 @@
 class InitialHardshell : public InitialState
 {
 public:
-    void initiate();
+    void initiate(); //Initialize Particles object
     void normalSpred(double std);
 };
