@@ -177,6 +177,7 @@ full computation is deferred to appendix~\ref{appendix:le}.
 \subsection{Onebody Density}
 
 \subsection{Blocking}
+\label{sec:blocking}
 When dealing with estimation based on data, either produced experimentally or numerically, a proper statistical treatment is appropriate. 
 
 Perhaps the most common estimator in statistics is the mean:
@@ -222,9 +223,9 @@ It can be shown that the quantity
 
 is invariant with respect to the degree of blocking $k$, where $\hat{\sigma}_k^2$ is the sample variance of $\vec{X}_k$, and $e_k$ is know as the truncation error. Under the assumption that the original data $\vec{X}_0$ is asymptotically uncorrelated, (kilde) showed that $e_k$ is decreasing, and can be make small given big enough $k$. Therefore, for sufficiently large $k$
 
-\begin{equation*}
-	V(\bar{X}_0) = V(\bar{X}_k) \approx \frac{\hat{\sigma}_k^2}{n_k} +  e_k \approx \frac{\hat{\sigma}_k^2}{n_k}
-\end{equation*}
+\begin{equation}\label{eq:trunc}
+V(\bar{X}_0) = V(\bar{X}_k) \approx \frac{\hat{\sigma}_k^2}{n_k} +  e_k \approx \frac{\hat{\sigma}_k^2}{n_k}
+\end{equation}
 
-In this way, the sample variance of the sufficiently blocked data does not suffer from underestimation, as the correlation is first eliminated.
+In this way, the sample variance of the sufficiently blocked data does not suffer from underestimation, as the correlation is first eliminated. 
   
