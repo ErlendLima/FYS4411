@@ -13,6 +13,7 @@
 
 
 void Sampler::initiate()
+//open all files that are to be written to
 {
     m_localEnergies = new std::ofstream(
         m_sys->m_directory + "/localEnergies_" +
@@ -37,6 +38,8 @@ void Sampler::initiate()
 void Sampler::sample(bool accepted)
 {
     if (accepted)
+    //recalculate relevant values if adjusted particle was accepted,
+    //else, caches values will be written to file
     {
         m_localEnergyOld = m_sys->getHamiltonian()->localEnergy();
         m_gradientAlphaOld = m_sys->getWavefunction()->gradAlpha();

@@ -6,7 +6,7 @@
 
 EllipticalOscillator::EllipticalOscillator(double omega)
 {
-    m_omega = omega;
+    m_omega = omega; //oscillator frequency
 }
 
 double EllipticalOscillator::localEnergy()

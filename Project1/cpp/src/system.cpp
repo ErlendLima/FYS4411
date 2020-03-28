@@ -88,12 +88,13 @@ void System::runMetropolis()
     bool accepted;
     int particle;
     initiate();
-    getSampler()->sample(true);
+    getSampler()->sample(true); //sample the initial configuration
 
     m_acceptanceRate = 0;
 
     for(int i=0; i < m_metropolisSteps - 1; i++)
     {
+        //propose adjustment to some particle
         particle = i%m_numParticles;
         getParticles()->proposeAdjustPos((this->*step)(particle), particle);
 

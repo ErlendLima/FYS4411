@@ -8,8 +8,8 @@ public:
 
     double& position(int particle, int dim);
     double* position(int particle);
-    double* getAdjustPos();
-    int getMovedParticle();
+    double* getAdjustPos(); //get position og adjusted particle
+    int getMovedParticle(); //return which particle was adjusted last
     void adjustPos(double step, int movedParticle, int dim);
     void proposeAdjustPos(double* step, int movedParticle);
     void commitAdjustPos();

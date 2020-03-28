@@ -22,6 +22,7 @@ void Particles::setSystem(System* sys)
 }
 
 double& Particles::position(int particle, int dim)
+//return mutable value of a particles position in dimension dim
 {
     return m_positions[particle][dim];
 }
@@ -37,6 +38,8 @@ void Particles::adjustPos(double step, int movedParticle, int dim)
 }
 
 void Particles::proposeAdjustPos(double* step, int movedParticle)
+//adjust the position of movedParticle with values given by step. Store
+//the adjusted position in addition to the old position
 {
     m_movedParticle = movedParticle;
     int numD = m_sys->getNumDim();
@@ -47,6 +50,7 @@ void Particles::proposeAdjustPos(double* step, int movedParticle)
 }
 
 void Particles::commitAdjustPos()
+//commit the adjusted position of the moved particle as the current position
 {
     for(int i = 0; i < m_sys->getNumDim(); i++)
     {

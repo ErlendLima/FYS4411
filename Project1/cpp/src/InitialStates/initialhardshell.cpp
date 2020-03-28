@@ -31,6 +31,9 @@ void InitialHardshell::initiate()
     double temp;
     double* pos1, *pos2;
 
+    //Redistribute particles according to normal distribution of increasing
+    //spread until all particles are non-overlapping, or until maxCount is
+    //reached
     while ((corr == 0) and (count < maxCount))
     {
         normalSpred(std);
