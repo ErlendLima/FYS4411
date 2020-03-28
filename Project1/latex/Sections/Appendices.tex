@@ -143,3 +143,23 @@ In the non-interactive case this reduces to
 
 
 \section{Dimensionless Hamiltonian}\label{appendix:dimhamiltonian}
+To make the Hamiltonian dimensionless, the following change of variables are
+\begin{align*}
+  \vb{r} \to \frac{\vb{r}}{a_{\text{ho}}} = \sqrt{\frac{m\omega}{\hbar}}\vb{r} \qquad E \to \frac{E}{\hbar\omega}
+  \qquad \nabla \to \sqrt{\frac{\hbar}{m\omega}}\nabla
+\end{align*}
+giving
+\begin{align*}
+  H \to H &= \sum_{i}\left( -\frac{\hbar^{2}}{2m}\frac{\omega m}{\hbar}\nabla^{2}_{i}
+  + \frac{1}{2}m\frac{\hbar}{m\omega}\left[ \omega^{2}\left( x_{i}^{2} + y_{i}^{2}\right) + \omega_{z}^{2}z_{i}^{2} \right] \right)\\
+  &\: + \sum_{i<j} V_{int}(\vb{r}_{i}, \vb{r}_{j})\\
+  &= \frac{\hbar\omega}{2}\sum_{i}\left(  -\nabla_{i}^{2} + \left[ x_{i}^{2} + y_{i}^{2} + \gamma^{2} z_{i}^{2} \right]\right)
+    + \sum_{i<j} V_{int}(\vb{r}_{i}, \vb{r}_{j})\\
+\end{align*}
+where the relation \(\gamma = \omega_{z}/\omega\) was made. Applying the \(E\)
+substitution and noting that \(V_{int}\) does not change if multiplied by any constant, the final result is obtained: 
+
+\begin{align*}
+  H &= \frac{1}{2}\sum_{i}\left(  -\nabla_{i}^{2} + \left[ x_{i}^{2} + y_{i}^{2} + \gamma^{2} z_{i}^{2} \right]\right)
+    + \sum_{i<j} V_{int}(\vb{r}_{i}, \vb{r}_{j})\\
+\end{align*}

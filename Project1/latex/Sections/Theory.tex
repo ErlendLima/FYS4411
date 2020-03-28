@@ -177,6 +177,18 @@ full computation is deferred to appendix~\ref{appendix:le}.
 \subsection{Drift Force}
 \subsection{Onebody Density}
 
+A useful way to understand a many body system is to integrate over all
+particles except for one, yielding the \textit{one body density} \(\rho(\vb{r})\)
+
+\begin{align*}
+  \rho(\vb{r}) = \int \d \vb{r}_{2}\ldots\d\vb{r}_{N}\left| \psit \right|^{2}
+\end{align*}
+
+It is a scaled probability density function giving the number of particles
+within the volume \(\Delta \vb{r}\) as \(\rho(\vb{r})\Delta \vb{r}\).
+By convention the integral over all \(\d \vb{r}\) yields the total number of
+particles in the system, \(N\).
+
 \subsection{Blocking}
 \label{sec:blocking}
 When dealing with estimation based on data, either produced experimentally or numerically, a proper statistical treatment is appropriate. 
