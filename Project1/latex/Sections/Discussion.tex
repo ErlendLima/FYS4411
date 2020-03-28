@@ -1,66 +1,85 @@
 \section{Results and Discussion}\label{sec:Discussion}
-\subsection{Sampling of States using Metropolis}
+\subsection{Validating the Model}
+
+\begin{table}[ht]
+  \begin{tabular}{r|cc}
+    \toprule
+    N & Numerical & Analytical \\
+    1 &           &           \\
+    2 &           &           \\
+    10 &           &           \\
+    100 &           &           \\
+    \bottomrule
+  \end{tabular}
+  \caption{Non-interactive particles in spherical potential compared to analytical
+    solution for \(\alpha = 0.5\). By~\eqref{eq:noninteracting}, there is not
+    spatial dependency, making the comparison easy.}
+  \label{tab:1}
+\end{table}
+
+To validate that our implementation works correctly, the model is run for a
+spherical potential without any interactions. The expected local energy is
+compared to the analytical solution, summarized in~\vref{tab:1}. The
+computed energies are exactly \(\frac{d}{2}\) of the number of particles, as
+expected from~\vref{eq:noninteracting}.
 
 \begin{figure}[ht]
-	\begin{subfigure}{\columnwidth}
-		\centering
-		\includegraphics[]{figures/density1.pdf}
-		\subcaption{Approximation of onebody density using Metropolis brute force sampling vs analytical(kilde)}
-		\label{fig:sfig1}
-	\end{subfigure}%
-	\begin{subfigure}{\columnwidth}
-		\centering
-		%\includegraphics[width=.8\linewidth]{figures/density2.pdf}
-		\includegraphics[]{figures/density2.pdf}
-		\subcaption{Approximation of onebody density using Metropolis importance sampling vs analytical}
-		\label{fig:sfig2}
-	\end{subfigure}
-	\caption{One-body density of 1 boson in 1 dimmension, using $N = 1e6$ cycles, $\omega = 1$, $\alpha = 0.5$.}
-	\label{fig:1 part 1 dim density}
+  \centering
+  \includegraphics[]{figures/density1.pdf}
+  \caption{One-body density of 1 boson in 1 dimmension, using $N = 1e6$ cycles, $\omega = 1$, $\alpha = 0.5$.}
+  \label{fig:1 part 1 dim density}
 \end{figure}
 
 \begin{figure}[ht]
-	\begin{subfigure}{\columnwidth}
-		\centering
-		\includegraphics[]{figures/density3.pdf}
-		\subcaption{Approximation of radial onebody density using Metropolis brute force sampling vs analytical}
-		\label{fig:sfig1}
-	\end{subfigure}%
-	\begin{subfigure}{\columnwidth}
-		\centering
-		\includegraphics[]{figures/density4.pdf}
-		\subcaption{Approximation of radial onebody density using Metropolis importance sampling vs analytical}
-		\label{fig:sfig2}
-	\end{subfigure}
-	\caption{Radial one-body density of 2 non-interacting bosons in 3 dimmensions, using $N = 1e6$ cycles, $\omega = 1$, $\alpha = 0.5$.}
-	\label{fig:2 part 3 dim density}
+  \includegraphics[]{figures/density2.pdf}
+  \caption{Radial one-body density of 2 non-interacting bosons in 3 dimmensions, using $N = 1e6$ cycles, $\omega = 1$, $\alpha = 0.5$.}
+  \label{fig:2 part 3 dim density}
 \end{figure}
 
-In \autoref{fig:1 part 1 dim density}  we see that both brute force sampling and importance sampling manage to approximate the onebody density derived from the non-interacting trial wave function: Aside from the statistical noise introduced by the finite number of Monte-Carlo cycles, the approximated densities follow the analytical result closely. Figure \autoref{fig:2 part 3 dim density} demonstrates that this also scales to more particles and dimensions, as seen from the radial onebody density of two particles in three dimensions. 
 
+Further validation is performed by comparing the one body density found from
+brute force sampling, importance sampling and analytical solution REF TO EQ,
+shown in~\vref{fig:1 part 1 dim density}. Aside from the statistical noise
+introduced by the finite number of Monte-Carlo cycles, the approximated
+densities follow the analytical result closely. \Cref{fig:2 part 3 dim
+  density} demonstrates how this scales with more particles and dimensions,
+as seen from the radial onebody density of two particles in three dimensions.
 
 \subsection{Blocking of Local Energy}
 \begin{figure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=.8\linewidth]{figures/blocking1.pdf}
-		\subcaption{Brute Force Sampling}
-	\end{subfigure}%
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=.8\linewidth]{figures/blocking2.pdf}
-		\subcaption{Importance Sampling}
-	\end{subfigure}%
+  \includegraphics{figures/blocking1.pdf}
 	\centering
-	\caption{Variance of the estimate of $<E>$ using blocked values of local energy at various strengths. The data has been produced for 40 non-interacting bosons i 3 dimension, using $N = 2^{20}$ cycles, $\alpha = 0.8$, $\omega = 1$, with and without importance sampling}
+	\caption{Variance of the estimate of $\langle E_{L} \rangle$ using blocked values of local
+      energy at various strengths. As the blocking strength increases, the
+      autocorrelation is decreased and variance increases before it plateaus,
+      shown with the black dot. The data have been produced for 40
+      non-interacting bosons in three dimensions using $N = 2^{20}$ cycles, $\alpha =
+      0.8$, $\omega = 1$, with and without importance sampling}
 	\label{fig:blocking1}
 \end{figure}
 
-In \autoref{fig:blocking1}, we see the effect of applying blocking on the local energy data before calculating the variance of the estimator (kilde). Although the local energies are sampled from an approximately correct distribution, as indicated by \autoref{fig:2 part 3 dim density}, the data is produced by moving a single electron at a time. Moreover, the move may even be rejected by the metropolis algorithm. Because of this, the data is highly correlated, causing an underestimation of the variance as seen for the unblocked data(blocking strength $0$). After repeated blocking, the variance stabilizes when the data is approximately uncorrelated. Note that this happens at different strengths of blocking for brute force sampling and importance sampling. This indicates that latter method creates data that are less correlated. This makes sense, as importance sampling uses additional information from the wave function and explores the space of states more efficiently than brute force. \autoref{fig:blocking1} shows that the variance stabilizes at strength $6$ when using importance sampling, as opposed to $9$ when using brute force. This grants us 8 times the effective amount of data and thus a smaller variance of the estimator.
+The effect of applying blocking to the local energy before calculating the
+variance is shown in~\cref{fig:blocking1}. Although the local energies are
+sampled from an approximately correct distribution, the data is produced by moving a single
+boson at a time. The move may be rejected by the metropolis
+algorithm, causing no change in state. Because of this, the data is highly correlated,
+leading to an underestimation of the variance as seen for the unblocked data.
+The variance stabilizes after repeated blocking, when the data is
+approximately uncorrelated. Note that this happens at different strength
+for brute force sampling and importance sampling. From~\cref{fig:blocking1}
+the latter requires a weaker blocking strength, indicating that
+the data created are less correlated. This is expected as
+importance sampling uses additional information from the wave function and
+explores the space of states more efficiently than brute force.
+The variance stabilizes at strength $6$ when
+using importance sampling as opposed to $9$ when using brute force. This grants
+eight times the effective amount of data and thus a smaller variance of the
+estimator.
 
-\begin{figure}
+
+\begin{figure}[ht]
 	\centering
-	\includegraphics[width=.8\linewidth]{figures/blocking3.pdf}
+	\includegraphics[]{figures/blocking3.pdf}
 	\caption{Variance of the estimate of $<E>$ using blocked values of local energy at various strengths. The data has been produced for 40 non-interacting bosons i 3 dimension, using $N = 2^{20}$ cycles, $\alpha = 0.8$, $\omega = 1$, using importance sampling with step length $0.5$, $1$ and $2$, respectively}
 	\label{fig:blocking2}
 \end{figure}
@@ -80,86 +99,117 @@ In \autoref{fig:blocking1}, we see the effect of applying blocking on the local 
 	\label{tab:blocking}
 \end{table}
 
-\autoref{fig:blocking2} repeats the results of \autoref{fig:blocking1}, but for a larger system of $40$ non-interacting bosons using importance sampling only. Step lengths of $0.5$, $1$ and $2$ was used. For a larger system, the local energies will tend to become more correlated as the moving of a single particle becomes a comparatively small change. This can be seen from the figure, as a higher order of blocking is required to stabilize the variance than in the two particle case.
+The effect of blocking for a larger system is shown in
+\cref{fig:blocking2} using only importance sampling and step lengths of
+$0.5$, $1$ and $2$. As only a single particle is moved in each MC cycle,
+increasing the size of the system results in a comparatively smaller change.
+The local energies will invariably become more correlated, which is apparent
+when comparing the blocking strengths from~\cref{fig:blocking2} to~\cref{fig:blocking1}.
 
-Further, the least correlated data was produces for step length $\delta t = 1$, requiring blocking strength $10$ as opposed to $11$ for $\delta t = 0.5$ and $2$. Using a step length too small results in the local energy changing minimally from cycle to cycle, increasing the correlation and minimizing the effective amount of data. The same happens if the step length is too big, as drastic moves will tend to be rejected often, causing repeated values to be sampled. \autoref{tab:blocking} presents the resulting estimates of energy with the uncertainty established using the blocking. This shows that the estimated energy is only sensitive to the step length in the sense that more cycles may be needed to get an accurate result of the step length is taken too small or too big.
+Further, the least correlated data was produced for a step length of $\delta t = 1$,
+requiring blocking strength $10$ as opposed to $11$ for $\delta t = 0.5$ and
+$2$. Using a step length too small results in the local energy changing
+minimally from cycle to cycle, increasing the correlation and minimizing the
+effective amount of data. The same happens if the step length is too big, as
+large moves will tend to be rejected often, causing repeated values to be
+sampled. \autoref{tab:blocking} presents the resulting estimates of energy with
+the uncertainty established using the blocking. The estimated
+energy is only sensitive to the step length in the sense that more cycles may be
+needed to get an accurate result of the step length is taken too small or too
+big.
+
  
 \subsection{Energy of Non-Interacting System}
-\begin{figure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=.8\linewidth]{figures/energy_bruteforce1.pdf}
-		\subcaption{Estimate of $\langle E \rangle$}
-	\end{subfigure}%
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=.8\linewidth]{figures/variance_bruteforce1.pdf}
-		\subcaption{Estimate of $V(E)$}
-	\end{subfigure}%
-	\centering
-	\caption{Estimated energy $\langle E \rangle$ and variance $V(E)$ for two non-interacting bosons, using $2^{17}$ cycles, $\omega = 1$ and brute force sampling. Errorbars was established using blocking. Teh analytical result is plotted for comparison. }
-	\label{fig:brute force energy}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[]{figures/energy_importance1.pdf}
+  \caption{\label{fig:energybyalpha} The expected local energy as function of
+    the variational parameter \(\alpha\) for both brute force and importance
+    sampling, compared to the analytical solution. The system consists of two
+    non-interacting bosons using \(2^{17}\) cycles.}
+\end{figure}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[]{figures/variance_importance1.pdf}
+  \caption{\label{fig:variancebyalpha} The variance of the expected local energy as function of
+    the variational parameter \(\alpha\) for both brute force and importance
+    sampling, compared to the analytical solution. The system consists of two
+    non-interacting bosons using \(2^{17}\) cycles.}
 \end{figure}
 
-As seen from \autoref{fig:brute force energy}, the estimated energy is consistent with the analytical within the uncertainty obtained using blocking. For $\alpha = 0.5$, the estimated value coincide with the analytical without any uncertainty, and $V(E)$ becomes zero. This is expected, as our trial wave function becomes the exact solution for $\alpha = 0.5$ for the non-interacting system.  
-
-\begin{figure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=.8\linewidth]{figures/energy_bruteforce1.pdf}
-		\subcaption{Estimate of $\langle E \rangle$}
-	\end{subfigure}%
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includegraphics[width=.8\linewidth]{figures/variance_bruteforce1.pdf}
-		\subcaption{Estimate of $V(E)$}
-	\end{subfigure}%
-	\centering
-	\caption{Estimated energy $\langle E \rangle$ and variance $V(E)$ for two non-interacting bosons, using $2^{17}$ cycles, $\omega = 1$ and importance sampling. Errorbars was established using blocking. The analytical result is plotted for comparison. }
-	\label{fig:importance energy}
-\end{figure}
-
-\autoref{fig:importance energy} presents the same data as \autoref{fig:brute force energy}, but using importance sampling. The data is consistent with the previous discussion, showing that importance sampling reproduces the correct results with respect to the estimation of the energy.
+Varying the variational parameter \(\alpha\) gives different trial wave
+functions that have different expected local energy. For the non-interacting
+spherical system there are analytical solutions for the \(\alpha\)-dependency of
+the
+local energy, and can be used to validate our model. This comparison is shown
+in~\cref{fig:energybyalpha} and~\cref{fig:variancebyalpha}. The curves overlap
+within the MC-uncertainty as expected, with the minimum occurring at
+\(\alpha=0.5\), giving confidence in the implementation.
 
 \subsection{Numerical and Analytical Laplacian}
-\begin{figure}
-	\includegraphics[width=.8\linewidth]{figures/numericalLap.pdf}
+\begin{figure}[ht]
+	\includegraphics[]{figures/numericalLap.pdf}
 	\centering
-	\caption{Estimated energy $\langle E \rangle$ for two non-interacting bosons, using numerically evaluated laplacian, $2^{17}$ cycles, $\omega = 1$ and importance sampling. Errorbars was established using blocking. }
+	\caption{Estimated energy $\langle E_{L} \rangle$ for two non-interacting
+      bosons, comparing the analytical solution to numerically evaluated
+      Laplacian. $2^{17}$ cycles, $\omega = 1$ and importance sampling was used. Errorbars was established using blocking. }
 	\label{fig:numerical lap}
 \end{figure}
 
-\begin{figure}
-	\includegraphics[width=.8\linewidth]{figures/numericalTime.pdf}
+\begin{figure}[ht]
+	\includegraphics[]{figures/numericalTime.pdf}
 	\centering
-	\caption{Comparison of CPU-time of numerical and analytical laplacian for different numbers of particles. The timing is with respect to the whole simulation, including writing to file}
+	\caption{Comparison of CPU-time of numerical and analytical Laplacian for
+      different numbers of particles. The timing is with respect to the whole
+      simulation, including writing to file. However, as the uninteresting steps
+    are of \(\mathcal{O}(1)\), they irrelevant when comparing the graphs.}
 	\label{fig:numerical time}
 \end{figure}
 
-Yet again, \autoref{fig:numerical lap} repeats the analysis of \autoref{fig:brute force energy} and 
-\autoref{fig:importance energy}, but using finite difference for evaluating the Laplacian of the wave function rather than the analytical expression. The resulting estimate is within the statistical error of the Monte-Carlo simulation, showing that finite difference implementation is stable and of sufficient accuracy. 
+When evaluating the Hamiltonian, one can choose to use the analytical expression
+for the Laplacian or compute it numerically using finite differences. Both
+methods give the same solution, as illustrated by~\cref{fig:numerical lap}.
+Suspecting that the computational cost differs, their CPU time are plotted
+in~\cref{fig:numerical time}. The difference is negligible with few particles,
+but the numerical Laplacian quickly outgrows the analytical, showing exponential
+dependency on the number of particles. Most potentials do now have analytical
+solution, having to rely on the much slower numerical computation. 
 
-\autoref{fig:numerical time} demonstrates that the CPU-time when using the analytical Laplacian is smaller than when using the finite difference method, for $1$ to $30$ non-interacting bosons. However, the speedup is small and hard to quantify, and even more negligible for systems of more particles. This is perhaps because, ultimately, in realistic simulations, a great portion of the CPU-time goes to other tasks such as writing the positions to file. The increase in CPU-time because of the numerical evaluation is not so big in comparison.    
 \subsection{Interacting Potentials}
-\begin{figure}
-	\includegraphics[width=.8\linewidth]{figures/interactingDensity.pdf}
+\begin{figure}[ht]
+	\includegraphics[]{figures/interactingDensity.pdf}
 	\centering
-	\caption{One body density in one dimension, for two non-interacting bosons, two interacting bosons, and three interacting bosons. $N = 400000$, $\alpha = 0.5$, $\omega = 1$, $a = 1$. The densities are compared to the analytical one body density for two non-interacting bosons.}
+	\caption{One body density \(\rho\) in one dimension for two non-interacting
+      bosons, two interacting bosons, and three interacting bosons.
+      Non-interacting bosons occupies the same space to minimize the energy,
+      while the interacting bosons separate. The more bosons, the greater they
+      spread out.}
 	\label{fig:interacting density}
 \end{figure}
 
-\autoref{interacting density} presents the 1 dimmensional onebody density for two non-interacting bosons, two interacting bosons of radius $a = 1$, and three interacting bosons of the same radius. 
-For the non-interacting case, the interacting model was used to produce the samples with the hard shell radius set to $a = 0$. Comparing it to the analytical result, we see that the implementation is consistent with the non-interacting case. For $a=1$, we see that the correlating term produces a repulsive effect, creating two distinct maxima of relatively higher density. For the case of three interacting bosons, we instead get three maxima. Intuitively, repelling particles seek to maximize the distance from eachother, while still being confined by the harmonic potential.
+Adding interaction between the bosons drastically changes the behavior of the
+system. In~\cref{fig:interacting density} non-interacting bosons are compared to
+systems having two and three interacting bosons. The densities the latter are
+spread out, with maxima directly proportional to the number of particles. The
+interpretation is that the interacting particles are repelled by each other and
+attempts to minimize their energy while staying within the potential, resulting
+in \(N\) bumps becoming more and more spread out as \(N\) grows.
+
 
 \subsection{Optimal Parameter \(\alpha\)}
-\begin{figure}
-	\includegraphics[width=.8\linewidth]{figures/gd.pdf}
+\begin{figure}[ht]
+	\includegraphics[]{figures/gd.pdf}
 	\centering
-	\caption{Gradient decent on the parameter $\alpha$ for two non-interacting bosons, learning rate $\mu = 0.01$, $N = 10000$ steps and $\omega = 1$}
+	\caption{Gradient decent on the parameter $\alpha$ for two non-interacting
+      bosons with different \(\alpha_{0}\), learning rate $\mu = 0.01$, $N = 10000$ steps and $\omega = 1$}
 	\label{fig:gd}
 \end{figure}
 
-\autoref{fig:gd} shows the result of gradient descent used to minimize the estimated energy $\langle E \rangle$ with respect to $\alpha$. For the non-interacting case, the method converges to $\alpha = 0.5$, which we know to be the analytical value for the exact wave function. This establish confidence that the method of gradient decent also yields the optimal $\alpha$ for the interacting case, where a analytical solution is not known. 
+Gradient descent was performed on the variational parameter \(\alpha\) with
+non-interactive bosons. \Cref{fig:gd} shows the results. The method is robust
+for different initial guesses \(\alpha_{0}\), all converging to \(0.5\) as
+expected. This establishes confidence that the method will converge to the
+optimal \(\alpha\) in the interacting case where the analytical solution is not known.
 
 \subsection{Interacting Bosons in Elliptical Potential}
 
@@ -199,12 +249,40 @@ For the non-interacting case, the interacting model was used to produce the samp
 	\label{fig:ellipticalOnebodyDensity}
 \end{figure}
 
-\autoref{tab:energies} presents the estimated ground state energies for $10$, $50$ and $100$ interacting bosons confined by a elliptical potential. The optimal value for $\alpha$ was found using gradient decent. Notice that the optimal value is decreasing with the number of particles in the interacting case, whereas it is analytically $\alpha = 0.5$ in the non-interacting case for any number of particles. A smaller value of $\alpha$ indicates the onebody exponential functions widens, resulting in a wider distribution of particles. This makes sense, as hardshell bosons interact repulsively. Therefore, the more particles, the more energetically favorable is it to spread out. This is consistent with the 1D result presented in \autoref{fig:ellipticalOnebodyDensity}. As the number of particles increase, the radial onebody density tends to migrate outward with respect to the non-interacting system. 
+\autoref{tab:energies} presents the estimated ground state energies for $10$,
+$50$ and $100$ interacting bosons confined by a elliptical potential. The
+optimal value for $\alpha$ was found using gradient decent. Notice that the
+optimal value is decreasing with the number of particles in the interacting
+case, whereas it is analytically $\alpha = 0.5$ in the non-interacting case for
+any number of particles. A smaller value of $\alpha$ indicates the onebody
+exponential functions widens, resulting in a wider distribution of particles.
+This makes sense, as hardshell bosons interact repulsively. Therefore, the more
+particles, the more energetically favorable is it to spread out. This is
+consistent with the 1D result presented in
+\autoref{fig:ellipticalOnebodyDensity}. As the number of particles increase, the
+radial onebody density tends to migrate outward with respect to the
+non-interacting system.
 
-The ground state energy was most accurately calculated for $10$ bosons. This is because, as discussed earlier, data tend to be less correlated for smaller systems. To get a accurat estimate for larger systems, a increase in the number of cycles is appropriate. However, because of limited computer power, this was neglected. 
+
+The ground state energy was most accurately calculated for $10$ bosons. This is
+because, as discussed earlier, data tend to be less correlated for smaller
+systems. To get a accurat estimate for larger systems, a increase in the number
+of cycles is appropriate. However, because of limited computer power, this was
+neglected.
+
 
 A comment on the interpretation of the error presented in \autoref{tab:energies} is appropriate:
-The error is an estimate of the statistical error in the estimated ground state energy introduced by the Monte-Carlo simulation. It does not account for possible error introduced in the estimation of $\alpha$ that minimizes the energy. This is much harder to quantity, and is possibly large in the case for $50$ and $100$ particles, as the gradient was hard to estimate consistently. Furthermore, the error does not in any way establish a confidence interval for the true ground state value of the Hamiltonian we are investigating, which is harder still to quantify. Our estimate a approximate minimum only in the subspace spanned by out trial wave function, which is hopefully, somewhat close the exact solution of the system.
+The error is an estimate of the statistical error in the estimated ground state
+energy introduced by the Monte-Carlo simulation. It does not account for
+possible error introduced in the estimation of $\alpha$ that minimizes the
+energy. This is much harder to quantity, and is possibly large in the case for
+$50$ and $100$ particles, as the gradient was hard to estimate consistently.
+Furthermore, the error does not in any way establish a confidence interval for
+the true ground state value of the Hamiltonian we are investigating, which is
+harder still to quantify. Our estimate a approximate minimum only in the
+subspace spanned by out trial wave function, which is hopefully, somewhat close
+the exact solution of the system.
+
 
 
 
