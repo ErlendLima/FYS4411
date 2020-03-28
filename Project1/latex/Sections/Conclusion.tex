@@ -1,5 +1,17 @@
 \begin{minipage}{\columnwidth}
 \section{Conclusion}\label{sec:Conclusion}
+Even though solving many-particle numerically can be a daunting task, partly because of the immense dimensional of $|\Psi(\vec{R})|^2$, Metropolis-Hastings prove to be an accurate algorithm for sampling states that follow the distribution, even when a normalizing factor is absent. This was shown in \autoref{fig:1 part 1 dim density} and \autoref{fig:2 part 3 dim density}.
 
+As local energies produced in this fashion tends to be highly correlated, because of the incremental changes in moving only a single particle at a time, blocking proved invaluable for removing correlation and establishing faithful estimates of statistical error introduced by Monte-Carlo. The severe underestimation of variance when not using blocking was shown in \autoref{fig:blocking1}.
+Importance sampling was shown in \autoref{fig:blocking1} to produce data less correlated than that produced by brute force, in turn yielding more effective data, as a lower degree of blocking was required to make the data uncorrelated. 
+
+The ground state energy in the space of our trial wave function was calculated to a precision of $0.005\%$, given that the optimal $\alpha$ was correct(\autoref{tab:energies}). The precision was lower for $50$ and $100$ bosons, $0.02\%$ and $0.1\%$ repectivly. As previously stated, a higher number of particles results in more strongly correlated local energies, and therefore less effective data. 
+
+The radial onebody density reveal an important characteristic of the system, namely that the hardshell potential acts repulsively, causing the distribution of particles to be wider in the interacting case than to the non-interacting. For a higher number of particles for a given confining potential, the widening was more pronounced, which goes to proving the same point.  
 
 \end{minipage}
+
+\section{Future Work}
+In terms of improving the already present methods, a obvious improvement is to automatize the picking of optimal degree of blocking for a set of data, instead of manually looking at the variance plot. A criterion for identifying if and where the variance stabilizes.
+
+To expand the project, the treatment of fermionic systems can easily be introduced. As we have developed a general solver class for VMC problems, only the trial wave function must be replaced by a appropriate anti-symmetric function that fits the problem we want to investigate, for example electrons in a harmonic potential.   
