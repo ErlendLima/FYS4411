@@ -46,3 +46,12 @@
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\newcommand{\uveci}{{\bm{\hat{\textnormal{\bfseries\i}}}}}
+\newcommand{\uvecj}{{\bm{\hat{\textnormal{\bfseries\j}}}}}
+\DeclareRobustCommand{\uvec}[1]{{%
+    \ifcsname uvec#1\endcsname
+    \csname uvec#1\endcsname
+    \else
+    \bm{\hat{\mathbf{#1}}}%
+    \fi
+  }}

@@ -5,3 +5,15 @@
 
 \subsection{Statistical Treatment}
 To avoid 
+
+\subsection{Gradient Descent}
+Variational Monte Carlo involves varying the variational parameter \(\alpha\)
+to find its optimal value. This is accomplished using gradient descent. The
+iterative method updates its guess at \(\alpha\) by steeping in the direction of
+the largest change in the local energy with respect to \(\alpha\)
+
+\begin{align*}
+  \alpha_{n+1} &= \alpha_{n} - \eta\pdv{E_{L}}{\alpha}\left( \alpha_{n} \right)
+\end{align*}
+
+As optimizing \(\alpha\) is comparatively simple, no more fancy a method is needed.

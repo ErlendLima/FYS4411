@@ -62,9 +62,6 @@ which can be computed using Monte Carlo integration as
 The goal is therefore to minimize minimizing \(\sigma^{2} = \expval{E_{L}^{2}} -
 \expval{E_{L}}^{2}\) over the variational parameter \(\alpha\).
 
-\subsection{Gradient Descent}
-The optimal value for the variational parameter is found by gradient descent.
-
 \subsection{The System}
 \subsubsection{The Potentials}
 
@@ -168,25 +165,51 @@ Applying the Hamiltonian gives the local energy as
 
 \subsubsection{Interacting Case}
 The local energy for the full interacting case is much more complicated. The
-full computation is deferred to appendix~\ref{appendix:le}.
+full computation is deferred to appendix~\ref{appendix:le}. The expression
+evaluates to
+
+\begin{align*}
+  E_{L} &= -\frac{1}{2m}\sum_{i}\bigg[4\alpha^{2}\left(  x_{k}^{2}\uvec{i} + y_{k}^{2}\uvec{j} + \beta^{2} z_{k}^{2}\uvec{k}  \right)\\
+        &-2\alpha(d-1+\beta)\\
+        &- 4\alpha\left(  x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k}  \right)
+          \sum_{l\neq k} \frac{\vb{r}_{k}-\vb{r}_{l}}{r_{kl}}u^{\prime}\left( r_{kl} \right)\\
+        &+ \sum_{i\neq k}\sum_{j\neq k}\frac{\left( \vb{r}_{k}-\vb{r}_{i} \right)\left( \vb{r}_{k} -\vb{r}_{j} \right)}{r_{ki}r_{kj}}u^{\prime}\left( r_{ki} \right)u^{\prime}\left( r_{kj} \right)\\
+        &+ \sum_{l\neq k} \left( u^{\prime\prime}\left( r_{kl} \right)  + \frac{2}{r_{kl}}u^{\prime}(r_{kl})\right)\bigg]\\
+        &+ \sum_{i}V_{\text{ext}}(\vb{r}_{i}) + \sum_{i<j}V_{\text{int}}\left( \vb{r}_{i}, \vb{r}_{i} \right)
+\end{align*}
 
 
 
 
 
 \subsection{Drift Force}
+
+The na\"{i} brute force approach in the Metropolis-Hastings algorithm has to
+preferred direction when exploring the configuration space, resulting in
+exploration of uninteresting areas. \textit{Importance sampling} remedies this
+by pushing the MC chain using a \textit{drift force}
+\begin{align*}
+  \vb{F}_{k}\left( \vb{r}_{1}, \ldots, \vb{r}_{N} \right) = 2 \frac{1}{\psit}\nabla_{k}\psit
+\end{align*}
+For the full system this evaluates to
+\begin{align*}
+  \vb{F}_{k}\left( \vb{r}_{1}, \ldots, \vb{r}_{N} \right) &= -4\alpha\left(  x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k} \right)\\
+  &+ 2\sum_{i\neq k} \frac{\vb{r}_{k} - \vb{r}_{i}}{r_{ki}}u^{\prime}\left( r_{ki} \right)
+\end{align*}
+See~\cref{app:drift} for derivation.
+
 \subsection{Onebody Density}
 
 A useful way to understand a many body system is to integrate over all
 particles except for one, yielding the \textit{one body density} \(\rho(\vb{r})\)
 
 \begin{align*}
-  \rho(\vb{r}) = \int \d \vb{r}_{2}\ldots\d\vb{r}_{N}\left| \psit \right|^{2}
+  \rho( \vb{r} ) = \int \dd \mathbf{r}_{2} \ldots \dd \mathbf{r}_{N} \left| \psit \right|^{2}
 \end{align*}
 
 It is a scaled probability density function giving the number of particles
 within the volume \(\Delta \vb{r}\) as \(\rho(\vb{r})\Delta \vb{r}\).
-By convention the integral over all \(\d \vb{r}\) yields the total number of
+By convention the integral over all \(\dd \vb{r}\) yields the total number of
 particles in the system, \(N\).
 
 \subsection{Blocking}

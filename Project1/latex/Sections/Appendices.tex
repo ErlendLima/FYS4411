@@ -91,15 +91,6 @@ we obtain the desired result
 The full expression involves computing each gradient and derivative. These are
 found to be
 
-\newcommand{\uveci}{{\bm{\hat{\textnormal{\bfseries\i}}}}}
-\newcommand{\uvecj}{{\bm{\hat{\textnormal{\bfseries\j}}}}}
-\DeclareRobustCommand{\uvec}[1]{{%
-    \ifcsname uvec#1\endcsname
-    \csname uvec#1\endcsname
-    \else
-    \bm{\hat{\mathbf{#1}}}%
-    \fi
-  }}
 \begin{align*}
   \nabla_{k}\phi_{k} &= -2\alpha\left( x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k} \right)\phi_{k}\\
   \nabla_{k}^{2}\phi_{k} &= \left[ 4\alpha^{2}\left(  x_{k}^{2}\uvec{i} + y_{k}^{2}\uvec{j} + \beta^{2} z_{k}^{2}\uvec{k}  \right) - 2\alpha(d - 1 + \beta) \right]\phi_{k}\\
@@ -124,6 +115,7 @@ giving
         &+ \sum_{i}V_{\text{ext}}(\vb{r}_{i}) + \sum_{i<j}V_{\text{int}}\left( \vb{r}_{i}, \vb{r}_{i} \right)
 \end{align*}
 \subsection{The Drift Force}
+\label{app:drift}
 The drift force can likewise be found by inserting the expression for the
 gradient~\eqref{eq:ap3} into
 
@@ -133,7 +125,7 @@ gradient~\eqref{eq:ap3} into
 giving
 \begin{align*}
   \vb{F}_{k} &= 2 \frac{\nabla_{k}\phi_{k}}{\phi_{k}} + 2\sum_{i\neq k}\frac{\vb{r}_{k}-\vb{r}_{i}}{r_{ki}}u^{\prime}\left( r_{kj} \right)\\
-             &= -4\alpha\left(   x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k}   \right) + 2\sum_{i\neq k} \frac{\vb{r}_{k}-\vb{r}_{i}}{r_{ki}}u^{\prime}\left( r_{kj} \right)\\
+             &= -4\alpha\left(   x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k}   \right) + 2\sum_{i\neq k} \frac{\vb{r}_{k}-\vb{r}_{i}}{r_{ki}}u^{\prime}\left( r_{ki} \right)\\
 \end{align*}
 In the non-interactive case this reduces to
 \begin{align*}
