@@ -212,56 +212,48 @@ within the volume \(\Delta \vb{r}\) as \(\rho(\vb{r})\Delta \vb{r}\).
 By convention the integral over all \(\dd \vb{r}\) yields the total number of
 particles in the system, \(N\).
 
-\subsection{Blocking}
-\label{sec:blocking}
-When dealing with estimation based on data, either produced experimentally or numerically, a proper statistical treatment is appropriate. 
+\subsection{Metropolis-Hastings}
 
-Perhaps the most common estimator in statistics is the mean:
+The estimate of the local energy relies on samples from the trial wave function.
+To get a physical value, the configuration of the particles must be as physical
+and probable. As the configuration achieving this is unknown, the configuration
+space must be explored, which is done through Monte Carlo simulation, more
+specifically by using the Metropolis-Hastings algorithm.
 
-\begin{equation}
-	\label{eq:mean}
-	\bar{X} = \frac{1}{N}\sum_{i=1}^{N}{X_i},
-\end{equation}
-where $X_i$ are identically distributed random variables, but not necessarily independent. To establish the uncertainty of the estimator, it necessary to calculate $V(\bar{X})$. By using the linearity of the variance
-\begin{equation}
-\label{eq:estimator var}
-\begin{split}
-	V(\bar{X}) = V(\frac{1}{N}\sum_{i=1}^{N}{X_i}) = \frac{1}{N^2}V(\sum_{i=1}^{N}{X_i})\\
-	=\frac{1}{N^2}\sum_{i,j}{Cov(X_i, X_j)},
-\end{split}
-\end{equation}
+At each MC step a single particle is chosen at random, and a change to its
+position is proposed by moving it a fixed step length \(\Delta\) and computing the
+ratio between new and old probability densities
+\begin{align*}
+  \omega = \frac{P\left( \vb{r}_{r}, \ldots, \vb{r}_{k}^{*}, \ldots, \vb{r}_{n} \right)}{P\left( \vb{r}_{r}, \ldots, \vb{r}_{k}, \ldots, \vb{r}_{n} \right)}
+  =  \frac{\left| \Psi_{T}\left( \vb{r}_{r}, \ldots, \vb{r}_{k}^{*}, \ldots, \vb{r}_{n} \right)\right|^{2}}{\left| \Psi_{T}\left( \vb{r}_{r}, \ldots, \vb{r}_{k}, \ldots, \vb{r}_{n} \right)\right|^{2}}
+\end{align*}
 
-where $Cov(X_i, X_j)$ is the covariance of $X_i$, and $X_j$. Under the assumption that the variables are independent, which is often approximately true, $Cov(X_i, X_j) = 0$, for $i \neq j$. The variance of the mean is thus simplified to 
-\begin{equation*}
-\begin{split}
-	V(\bar{X}) = \frac{1}{N^2}\sum_{i}{Cov(X_i, X_i)} = \frac{1}{N^2}\sum_{i}{Var(X_i)} \\
-	=\frac{N}{N^2}Var(X) = \frac{Var(X)}{N},
-\end{split}
-\end{equation*} 
-where it has been used that the variables are identically distributed. This is a convenient result, as one can calculate the variance of estimator based on the variance of random variables $X$ that enter it. This is typically done using the sample variance
-\begin{equation*}
-	V(X) \approx \frac{1}{N}\sum_{i=1}^{N}{(x_i - \bar{x})^2},
-\end{equation*}
-where $x_i$ is some sample and $\bar{x} = 1/N\sum{x_i)}$ is the sample mean. Problems arise when the data is correlated, as the neglect of cross terms present in \autoref{eq:estimator var} causes a underestimation of the variance of the estimator. This is very important to bear in mind when working with VMC, as data produced by simulating many particles tends to be highly correlated.
+This ratio can often be reduced analytically to obviate the need for recomputing
+the entire probability density each step. If the ratio \(\omega\) is greater
+than a
+uniformly distributed number \(\theta \in [0, 1]\), the move is accepted.
 
-Made popular by (kilde), blocking is a renormalization method for treating correlated data when calculating the variance of $\bar{X}$. Blocking is defined by a recursive downsampling of data. Starting with a vector containing the original data $\vec{X}_0$, blocking of degree $d$ is obtained by performing
+The disadvantage with this naive approach is that the proposed move is random.
+The configuration space is explored more effectively by instead moving towards
+regions of higher probability density. As explained in SOURCE, this is achieved
+by adding a quantum force on the particle \textit{k}
 
-\begin{equation*}
-	(\vec{X}_{i+1})_k = \frac{1}{2}((\vec{X}_{i})_{2k -1} + (\vec{X}_{i})_{2k}),
-\end{equation*}
-for all $1 \leq i leq d-1$. 
-\newline
-It can be shown that the quantity 
+\begin{align*}
+  \vb{F}_{k} = 2\frac{1}{\Psi_{t}}\nabla_{k}\Psi_{t}
+\end{align*}
+The force is incorporated into the probability ratio by the Green's function of
+the Fokker-Planck equation:
+\begin{align*}
+  G\left( \vb{r}_{1},\ldots,\vb{r}_{N},\vb{r}^{\prime}_{1},\ldots,\vb{r}^{\prime}_{N} \right)
+  &= \frac{1}{(4\pi D\Delta t)^{3/2}}\times\\
+  &\sum_{i=1}^{N}\exp\left( -\frac{\left[\vb{r}_{i}-\vb{r}^{\prime}_{i}-D\Delta t \vb{F}_{i}\right]^{2}}{4D\Delta t} \right)
+\end{align*}
+giving a new expression of the transition probability as
 
-\begin{equation*}
-	V(\bar{X_k}) \approx \frac{\hat{\sigma}_k^2}{n_k} +  e_k
-\end{equation*}
+\begin{align*}
+  \omega = \frac{G\left(  \vb{r}_{1},\ldots,\vb{r}_{N},\vb{r}^{\prime}_{1},\ldots,\vb{r}^{\prime}_{N} \right)\left|\Psi_{T}\left( \vb{r}_{1},\ldots,\vb{r}_{N} \right)\right|^{2}}{G\left(  \vb{r}_{1}^{\prime},\ldots,\vb{r}_{N}^{\prime},\vb{r}^{\prime}_{1},\ldots,\vb{r}^{\prime}_{N} \right)\left|\Psi_{T}\left( \vb{r}_{1}^{\prime},\ldots,\vb{r}_{N}^{\prime} \right)\right|^{2}}
+\end{align*}
 
-is invariant with respect to the degree of blocking $k$, where $\hat{\sigma}_k^2$ is the sample variance of $\vec{X}_k$, and $e_k$ is know as the truncation error. Under the assumption that the original data $\vec{X}_0$ is asymptotically uncorrelated, (kilde) showed that $e_k$ is decreasing, and can be make small given big enough $k$. Therefore, for sufficiently large $k$
-
-\begin{equation}\label{eq:trunc}
-V(\bar{X}_0) = V(\bar{X}_k) \approx \frac{\hat{\sigma}_k^2}{n_k} +  e_k \approx \frac{\hat{\sigma}_k^2}{n_k}
-\end{equation}
-
-In this way, the sample variance of the sufficiently blocked data does not suffer from underestimation, as the correlation is first eliminated. 
-  
+This is known as \textit{importance sampling}. Far more computationally
+expensive than naive brute force sampling, by also leading to a larger number of
+accepted MC steps. 

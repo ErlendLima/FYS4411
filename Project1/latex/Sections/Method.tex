@@ -1,10 +1,81 @@
 \section{Method}\label{sec:Method}
 \subsection{Outline of Program}
-\subsection{Non Interacting Potentials}
-\subsection{Interacting Potentials}
+The code is divided into two: % twain, heh
+a C++ backend and Python frontend. The Python code is a simple wrapper around
+the C++ and functions as a high level interface which is used in the Jupyter
+notebooks. The C++ is object oriented with \textsf{System} running the
+simulation, \textsf{Sampler} extracts interesting observables from the
+simulation, and \textsf{Hamiltonian}, \textsf{WaveFunction} and
+\textsf{InitialState} and their subclasses are composable objects for
+constructing different systems, such as spherical trap with non-interacting bosons. 
+
+As previously mentioned, the simulations are run using high-level code in the
+Jupyter notebooks. These can be run the replicate all results presented herein.
 
 \subsection{Statistical Treatment}
-To avoid 
+\label{sec:blocking}
+When dealing with estimation based on data, either produced experimentally or
+numerically, a proper statistical treatment is appropriate.
+
+Perhaps the most common estimator in statistics is the mean:
+
+\begin{equation}
+	\label{eq:mean}
+	\bar{X} = \frac{1}{N}\sum_{i=1}^{N}{X_i},
+\end{equation}
+where $X_i$ are identically distributed random variables, but not necessarily
+independent. To establish the uncertainty of the estimator, it necessary to
+calculate $V(\bar{X})$. By using the linearity of the variance, we have
+\newcommand{\Cov}{\mathrm{Cov}}
+\begin{align*}
+\label{eq:estimator var}
+  V(\bar{X}) &= V(\frac{1}{N}\sum_{i=1}^{N}{X_i})\\
+             &= \frac{1}{N^2}V(\sum_{i=1}^{N}{X_i})\\
+             &=\frac{1}{N^2}\sum_{i,j}{\Cov(X_i, X_j)}\numberthis
+\end{align*}
+
+where $\Cov(X_i, X_j)$ is the covariance of $X_i$, and $X_j$. Under the
+assumption that the variables are independent, which is often approximately
+true, $\Cov(X_i, X_j) = 0$, for $i \neq j$. The variance of the mean is thus simplified to 
+\begin{align*}
+  V(\bar{X}) &= \frac{1}{N^2}\sum_{i}{Cov(X_i, X_i)} \\
+  &= \frac{1}{N^2}\sum_{i}{Var(X_i)} \\
+	&=\frac{N}{N^2}Var(X) = \frac{Var(X)}{N}
+\end{align*}
+where it has been used that the variables are identically distributed.
+This is a convenient result, as one can calculate the variance of estimator
+based on the variance of random variables $X$ that enter it. This is typically done using the sample variance
+\begin{equation*}
+	V(X) \approx \frac{1}{N}\sum_{i=1}^{N}{(x_i - \bar{x})^2},
+\end{equation*}
+where $x_i$ is some sample and $\bar{x} = \frac{1}{N}\sum{x_i}$ is the sample mean.
+Problems arise when the data is correlated, as the neglect of cross terms
+present in \autoref{eq:estimator var} causes a underestimation of the variance
+of the estimator. This is very important to bear in mind when working with VMC,
+as data produced by simulating many particles tends to be highly correlated. 
+
+
+Made popular by (kilde), blocking is a renormalization method for treating correlated data when calculating the variance of $\bar{X}$. Blocking is defined by a recursive downsampling of data. Starting with a vector containing the original data $\vec{X}_0$, blocking of degree $d$ is obtained by performing
+
+\begin{equation*}
+	\left(\vec{X}_{i+1}\right)_k = \frac{1}{2}\left(\left(\vec{X}_{i}\right)_{2k -1} + \left(\vec{X}_{i}\right)_{2k}\right),
+\end{equation*}
+for all $1 \leq i \leq d-1$. 
+\newline
+It can be shown that the quantity 
+
+\begin{equation*}
+	V(\bar{X_k}) \approx \frac{\hat{\sigma}_k^2}{n_k} +  e_k
+\end{equation*}
+
+is invariant with respect to the degree of blocking $k$, where $\hat{\sigma}_k^2$ is the sample variance of $\vec{X}_k$, and $e_k$ is know as the truncation error. Under the assumption that the original data $\vec{X}_0$ is asymptotically uncorrelated, (kilde) showed that $e_k$ is decreasing, and can be make small given big enough $k$. Therefore, for sufficiently large $k$
+
+\begin{equation}\label{eq:trunc}
+V(\bar{X}_0) = V(\bar{X}_k) \approx \frac{\hat{\sigma}_k^2}{n_k} +  e_k \approx \frac{\hat{\sigma}_k^2}{n_k}
+\end{equation}
+
+In this way, the sample variance of the sufficiently blocked data does not suffer from underestimation, as the correlation is first eliminated. 
+  
 
 \subsection{Gradient Descent}
 Variational Monte Carlo involves varying the variational parameter \(\alpha\)
