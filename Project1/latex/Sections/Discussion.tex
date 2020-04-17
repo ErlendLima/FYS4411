@@ -2,22 +2,23 @@
 \subsection{Validating the Model}
 
 \begin{table}[ht]
-  \begin{tabular}{r|cc}
+  \begin{tabular}{r|rr}
     \toprule
-    N & Numerical & Analytical \\
-    1 &           &           \\
-    2 &           &           \\
-    10 &           &           \\
-    100 &           &           \\
+    N   & Numerical & Analytical \\
+    1   & \(1.5\pm 0.0\)          &   1.5        \\
+    2   &  \(3.0 \pm 0.0\)         &    3       \\
+    10  & \(15.0\pm 0.0\)          &    15       \\
+    100 &  \(150.0\pm 0.0\)         &   150        \\
     \bottomrule
   \end{tabular}
-  \caption{Non-interactive particles in spherical potential compared to analytical
-    solution for \(\alpha = 0.5\). By~\eqref{eq:noninteracting}, there is not
-    spatial dependency, making the comparison easy.}
+  \caption{Expected local energy for non-interactive particles in 3D spherical potential compared to analytical
+    solution for \(\alpha = 0.5\) for different number of particles. By~\eqref{eq:noninteracting}, there is no
+    spatial dependency, making the comparison easy. The numerical results agree
+    perfectly with the analytical value.}
   \label{tab:1}
 \end{table}
 
-To validate that our implementation works correctly, the model is run for a
+To validate that our implementation is working correctly, the model is run for a
 spherical potential without any interactions. The expected local energy is
 compared to the analytical solution, summarized in~\vref{tab:1}. The
 computed energies are exactly \(\frac{d}{2}\) of the number of particles, as
@@ -26,19 +27,19 @@ expected from~\vref{eq:noninteracting}.
 \begin{figure}[ht]
   \centering
   \includegraphics[]{figures/density1.pdf}
-  \caption{One-body density of 1 boson in 1 dimmension, using $N = 1e6$ cycles, $\omega = 1$, $\alpha = 0.5$.}
+  \caption{One-body density of 1 boson in 1 dimension, using $N = \num{1e6}$ cycles, $\omega = 1$, $\alpha = 0.5$.}
   \label{fig:1 part 1 dim density}
 \end{figure}
 
 \begin{figure}[ht]
   \includegraphics[]{figures/density2.pdf}
-  \caption{Radial one-body density of 2 non-interacting bosons in 3 dimmensions, using $N = 1e6$ cycles, $\omega = 1$, $\alpha = 0.5$.}
+  \caption{Radial one-body density of 2 non-interacting bosons in 3 dimensions, using $N = \num{1e6}$ cycles, $\omega = 1$, $\alpha = 0.5$.}
   \label{fig:2 part 3 dim density}
 \end{figure}
 
 
 Further validation is performed by comparing the one body density found from
-brute force sampling, importance sampling and analytical solution REF TO EQ,
+brute force sampling, importance sampling and analytical solution~\cref{eq:driftforce}
 shown in~\vref{fig:1 part 1 dim density}. Aside from the statistical noise
 introduced by the finite number of Monte-Carlo cycles, the approximated
 densities follow the analytical result closely. \Cref{fig:2 part 3 dim
@@ -58,7 +59,7 @@ as seen from the radial onebody density of two particles in three dimensions.
 	\label{fig:blocking1}
 \end{figure}
 
-The effect of applying blocking to the local energy before calculating the
+The effect of applying blocking on the local energy before calculating the
 variance is shown in~\cref{fig:blocking1}. Although the local energies are
 sampled from an approximately correct distribution, the data is produced by moving a single
 boson at a time. The move may be rejected by the metropolis
@@ -72,7 +73,7 @@ the data created are less correlated. This is expected as
 importance sampling uses additional information from the wave function and
 explores the space of states more efficiently than brute force.
 The variance stabilizes at strength $6$ when
-using importance sampling as opposed to $9$ when using brute force. This grants
+using importance sampling as opposed to $9$ when using brute force, granting
 eight times the effective amount of data and thus a smaller variance of the
 estimator.
 
@@ -80,7 +81,11 @@ estimator.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[]{figures/blocking3.pdf}
-	\caption{Variance of the estimate of $<E>$ using blocked values of local energy at various strengths. The data has been produced for 40 non-interacting bosons i 3 dimension, using $N = 2^{20}$ cycles, $\alpha = 0.8$, $\omega = 1$, using importance sampling with step length $0.5$, $1$ and $2$, respectively}
+	\caption{Variance of the estimate of $\langle E\rangle$ using blocked values
+      of local energy at various strengths. The data has been produced for 40
+      non-interacting bosons in 3 dimensions, using $N = 2^{20}$ cycles, $\alpha =
+      0.8$, $\omega = 1$, using importance sampling with step length $0.5$, $1$
+      and $2$, respectively} 
 	\label{fig:blocking2}
 \end{figure}
 
@@ -106,7 +111,7 @@ increasing the size of the system results in a comparatively smaller change.
 The local energies will invariably become more correlated, which is apparent
 when comparing the blocking strengths from~\cref{fig:blocking2} to~\cref{fig:blocking1}.
 
-Further, the least correlated data was produced for a step length of $\delta t = 1$,
+Further, the least correlated data was produced with a step length of $\delta t = 1$,
 requiring blocking strength $10$ as opposed to $11$ for $\delta t = 0.5$ and
 $2$. Using a step length too small results in the local energy changing
 minimally from cycle to cycle, increasing the correlation and minimizing the
@@ -161,7 +166,7 @@ within the MC-uncertainty as expected, with the minimum occurring at
 	\centering
 	\caption{Comparison of CPU-time of numerical and analytical Laplacian for
       different numbers of particles. The timing is with respect to the whole
-      simulation, including writing to file. However, as the uninteresting steps
+      simulation. However, as the uninteresting steps
     are of \(\mathcal{O}(1)\), they irrelevant when comparing the graphs.}
 	\label{fig:numerical time}
 \end{figure}
@@ -182,14 +187,14 @@ solution, having to rely on the much slower numerical computation.
 	\caption{One body density \(\rho\) in one dimension for two non-interacting
       bosons, two interacting bosons, and three interacting bosons.
       Non-interacting bosons occupies the same space to minimize the energy,
-      while the interacting bosons separate. The more bosons, the greater they
+      while the interacting bosons separate. The more bosons, the more they
       spread out.}
 	\label{fig:interacting density}
 \end{figure}
 
 Adding interaction between the bosons drastically changes the behavior of the
 system. In~\cref{fig:interacting density} non-interacting bosons are compared to
-systems having two and three interacting bosons. The densities the latter are
+systems having two and three interacting bosons. The densities of the latter are
 spread out, with maxima directly proportional to the number of particles. The
 interpretation is that the interacting particles are repelled by each other and
 attempts to minimize their energy while staying within the potential, resulting
@@ -257,7 +262,7 @@ case, whereas it is analytically $\alpha = 0.5$ in the non-interacting case for
 any number of particles. A smaller value of $\alpha$ indicates the onebody
 exponential functions widens, resulting in a wider distribution of particles.
 This makes sense, as hardshell bosons interact repulsively. Therefore, the more
-particles, the more energetically favorable is it to spread out. This is
+particles, the more energetically favorable it is to spread out. This is
 consistent with the 1D result presented in
 \autoref{fig:ellipticalOnebodyDensity}. As the number of particles increase, the
 radial onebody density tends to migrate outward with respect to the
@@ -266,9 +271,9 @@ non-interacting system.
 
 The ground state energy was most accurately calculated for $10$ bosons. This is
 because, as discussed earlier, data tend to be less correlated for smaller
-systems. To get a accurat estimate for larger systems, a increase in the number
-of cycles is appropriate. However, because of limited computer power, this was
-neglected.
+systems. To get an accurate estimate for larger systems, a increase in the number
+of cycles is appropriate. Due to the increasing CPU-demand, a trade-off must be
+made between time and accuracy.
 
 
 A comment on the interpretation of the error presented in \autoref{tab:energies} is appropriate:
@@ -289,3 +294,8 @@ the exact solution of the system.
 
 
 
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

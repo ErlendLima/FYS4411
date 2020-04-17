@@ -101,11 +101,11 @@ trial wavefunction is therefore
 
 \begin{align*}
   h(\vb{r}_{1}, \ldots, \vb{r}_{N}, \alpha, \beta) &= \prod_{i=1}^{N}g(\vb{r}_{i}, \alpha, \beta)\\
-  &= \exp{-\sum_{i=1}^{N}\left( x_{i}^{2} + y_{i}^{2}+\beta z_{i}^{2} \right)}
+  &= \exp{-\alpha\sum_{i=1}^{N}\left( x_{i}^{2} + y_{i}^{2}+\beta z_{i}^{2} \right)}
 \end{align*}
 with \(g\) the onebody function.
 The internal potential should cause the wavefunction to decrease continuously
-down to zero as the distance of two particles goes to zero. Once such possible
+down to zero as the distance of two particles goes to zero. One such possible
 function is
 
 \begin{equation*}
@@ -182,26 +182,11 @@ evaluates to
 
 
 
-\subsection{Drift Force}
-
-The na\"{i} brute force approach in the Metropolis-Hastings algorithm has to
-preferred direction when exploring the configuration space, resulting in
-exploration of uninteresting areas. \textit{Importance sampling} remedies this
-by pushing the MC chain using a \textit{drift force}
-\begin{align*}
-  \vb{F}_{k}\left( \vb{r}_{1}, \ldots, \vb{r}_{N} \right) = 2 \frac{1}{\psit}\nabla_{k}\psit
-\end{align*}
-For the full system this evaluates to
-\begin{align*}
-  \vb{F}_{k}\left( \vb{r}_{1}, \ldots, \vb{r}_{N} \right) &= -4\alpha\left(  x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k} \right)\\
-  &+ 2\sum_{i\neq k} \frac{\vb{r}_{k} - \vb{r}_{i}}{r_{ki}}u^{\prime}\left( r_{ki} \right)
-\end{align*}
-See~\cref{app:drift} for derivation.
-
 \subsection{Onebody Density}
 
 A useful way to understand a many body system is to integrate over all
-particles except for one, yielding the \textit{one body density} \(\rho(\vb{r})\)
+dimensions except for one, yielding the \textit{one body density}
+\(\rho(\vb{r})\), defined as
 
 \begin{align*}
   \rho( \vb{r} ) = \int \dd \mathbf{r}_{2} \ldots \dd \mathbf{r}_{N} \left| \psit \right|^{2}
@@ -217,7 +202,7 @@ particles in the system, \(N\).
 The estimate of the local energy relies on samples from the trial wave function.
 To get a physical value, the configuration of the particles must be as physical
 and probable. As the configuration achieving this is unknown, the configuration
-space must be explored, which is done through Monte Carlo simulation, more
+space must be explore. This is done through Monte Carlo simulation, more
 specifically by using the Metropolis-Hastings algorithm.
 
 At each MC step a single particle is chosen at random, and a change to its
@@ -227,20 +212,23 @@ ratio between new and old probability densities
   \omega = \frac{P\left( \vb{r}_{r}, \ldots, \vb{r}_{k}^{*}, \ldots, \vb{r}_{n} \right)}{P\left( \vb{r}_{r}, \ldots, \vb{r}_{k}, \ldots, \vb{r}_{n} \right)}
   =  \frac{\left| \Psi_{T}\left( \vb{r}_{r}, \ldots, \vb{r}_{k}^{*}, \ldots, \vb{r}_{n} \right)\right|^{2}}{\left| \Psi_{T}\left( \vb{r}_{r}, \ldots, \vb{r}_{k}, \ldots, \vb{r}_{n} \right)\right|^{2}}
 \end{align*}
-
-This ratio can often be reduced analytically to obviate the need for recomputing
-the entire probability density each step. If the ratio \(\omega\) is greater
+where \(\vb{r}^{*}\) denotes a modified position.
+If the ratio \(\omega\) is greater
 than a
 uniformly distributed number \(\theta \in [0, 1]\), the move is accepted.
+This ratio can often be reduced analytically to obviate the need for recomputing
+the entire probability density each step.
 
-The disadvantage with this naive approach is that the proposed move is random.
+\subsection{Drift Force}
+The disadvantage of the brute force approach is that the proposed move is random.
 The configuration space is explored more effectively by instead moving towards
-regions of higher probability density. As explained in SOURCE, this is achieved
-by adding a quantum force on the particle \textit{k}
+regions of higher probability density. This is achieved
+by adding a quantum force on the particle \textit{k}:
 
 \begin{align*}
-  \vb{F}_{k} = 2\frac{1}{\Psi_{t}}\nabla_{k}\Psi_{t}
+  \vb{F}_{k}\left( \vb{r}_{1}, \ldots, \vb{r}_{N} \right) = 2 \frac{1}{\psit}\nabla_{k}\psit
 \end{align*}
+
 The force is incorporated into the probability ratio by the Green's function of
 the Fokker-Planck equation:
 \begin{align*}
@@ -257,3 +245,17 @@ giving a new expression of the transition probability as
 This is known as \textit{importance sampling}. Far more computationally
 expensive than naive brute force sampling, by also leading to a larger number of
 accepted MC steps. 
+
+For the full system the drift force evaluates to
+\begin{align*}
+  \label{eq:driftforce}
+  \vb{F}_{k}\left( \vb{r}_{1}, \ldots, \vb{r}_{N} \right) &= -4\alpha\left(  x_{k}\uvec{i} + y_{k}\uvec{j} + \beta z_{k}\uvec{k} \right)\\
+                                                          &+ 2\sum_{i\neq k} \frac{\vb{r}_{k} - \vb{r}_{i}}{r_{ki}}u^{\prime}\left( r_{ki} \right)
+                                                            \numberthis
+\end{align*}
+See~\cref{app:drift} for derivation.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:

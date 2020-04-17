@@ -4,13 +4,13 @@ The code is divided into two: % twain, heh
 a C++ backend and Python frontend. The Python code is a simple wrapper around
 the C++ and functions as a high level interface which is used in the Jupyter
 notebooks. The C++ is object oriented with \textsf{System} running the
-simulation, \textsf{Sampler} extracts interesting observables from the
+simulation, \textsf{Sampler} extracting interesting observables from the
 simulation, and \textsf{Hamiltonian}, \textsf{WaveFunction} and
 \textsf{InitialState} and their subclasses are composable objects for
 constructing different systems, such as spherical trap with non-interacting bosons. 
 
-As previously mentioned, the simulations are run using high-level code in the
-Jupyter notebooks. These can be run the replicate all results presented herein.
+The Jupyter notebooks are available in the GitHub repository, and run reproduce
+all presented herein.
 
 \subsection{Statistical Treatment}
 \label{sec:blocking}
@@ -87,4 +87,9 @@ the largest change in the local energy with respect to \(\alpha\)
   \alpha_{n+1} &= \alpha_{n} - \eta\pdv{E_{L}}{\alpha}\left( \alpha_{n} \right)
 \end{align*}
 
-As optimizing \(\alpha\) is comparatively simple, no more fancy a method is needed.
+As optimizing \(\alpha\) is comparatively simple, no more fancy a method is
+needed.
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End:
