@@ -43,8 +43,8 @@ true, $\Cov(X_i, X_j) = 0$, for $i \neq j$. The variance of the mean is thus sim
 	&=\frac{N}{N^2}Var(X) = \frac{Var(X)}{N}
 \end{align*}
 where it has been used that the variables are identically distributed.
-This is a convenient result, as one can calculate the variance of estimator
-based on the variance of random variables $X$ that enter it. This is typically done using the sample variance
+This is a convenient result, as one can calculate the variance of an estimator
+based on the variance of the random variables $X$ that enter it. This is typically done using the sample variance
 \begin{equation*}
 	V(X) \approx \frac{1}{N}\sum_{i=1}^{N}{(x_i - \bar{x})^2},
 \end{equation*}
@@ -55,7 +55,7 @@ of the estimator. This is very important to bear in mind when working with VMC,
 as data produced by simulating many particles tends to be highly correlated. 
 
 
-Made popular by (kilde), blocking is a renormalization method for treating correlated data when calculating the variance of $\bar{X}$. Blocking is defined by a recursive downsampling of data. Starting with a vector containing the original data $\vec{X}_0$, blocking of degree $d$ is obtained by performing
+Made popular by H. Flyvbjerg \cite{Blocking}, blocking is a renormalization method for treating correlated data when calculating the variance of $\bar{X}$. Blocking is defined by a recursive downsampling of data. Starting with a vector containing the original data $\vec{X}_0$, blocking of degree $d$ is obtained by performing
 
 \begin{equation*}
 	\left(\vec{X}_{i+1}\right)_k = \frac{1}{2}\left(\left(\vec{X}_{i}\right)_{2k -1} + \left(\vec{X}_{i}\right)_{2k}\right),
@@ -68,7 +68,7 @@ It can be shown that the quantity
 	V(\bar{X_k}) \approx \frac{\hat{\sigma}_k^2}{n_k} +  e_k
 \end{equation*}
 
-is invariant with respect to the degree of blocking $k$, where $\hat{\sigma}_k^2$ is the sample variance of $\vec{X}_k$, and $e_k$ is know as the truncation error. Under the assumption that the original data $\vec{X}_0$ is asymptotically uncorrelated, (kilde) showed that $e_k$ is decreasing, and can be make small given big enough $k$. Therefore, for sufficiently large $k$
+is invariant with respect to the degree of blocking $k$, where $\hat{\sigma}_k^2$ is the sample variance of $\vec{X}_k$, and $e_k$ is know as the truncation error. Under the assumption that the original data $\vec{X}_0$ is asymptotically uncorrelated, \cite{Blocking} showed that $e_k$ is decreasing, and can be make small given big enough $k$. Therefore, for sufficiently large $k$
 
 \begin{equation}\label{eq:trunc}
 V(\bar{X}_0) = V(\bar{X}_k) \approx \frac{\hat{\sigma}_k^2}{n_k} +  e_k \approx \frac{\hat{\sigma}_k^2}{n_k}
@@ -89,6 +89,24 @@ the largest change in the local energy with respect to \(\alpha\)
 
 As optimizing \(\alpha\) is comparatively simple, no more fancy a method is
 needed.
+
+\subsection{One-Body Density}
+Given a many-particle wave function 
+\begin{equation}
+	\psi(\vec{x}_1, \vec{x}_2, ..., \vec{x}_N),
+\end{equation}
+
+the one-body density is obtained by integrating the modulus squared with respect to all but the first spatial coordinates,
+
+\begin{equation}
+	\rho(\vec{x}_1) = \int d \vec{x}_2... d \vec{x}_N|\psi(\vec{x}_1, \vec{x}_2, ..., \vec{x}_N)|^2
+\end{equation}
+
+The one-body density gives the average particle density at any given spatial location. It is conceptually important to investigate, since it contains essential information about the system and can be found experimentally, unlike the whole wave function.
+
+To extract a one-body density from a Monte-Carlo simulation, we partition space into a number of bins in an appropriate range where the wave function is large. For each particle configuration produced at every Metropolis step, the number of particles coinciding with each bin is checked. The one-body density is then produced by averaging over all Metropolis steps. 
+
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../main"
