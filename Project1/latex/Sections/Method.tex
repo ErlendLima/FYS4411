@@ -91,20 +91,9 @@ As optimizing \(\alpha\) is comparatively simple, no more fancy a method is
 needed.
 
 \subsection{One-Body Density}
-Given a many-particle wave function 
-\begin{equation}
-	\psi(\vec{x}_1, \vec{x}_2, ..., \vec{x}_N),
-\end{equation}
+To extract a one-body density from a Monte-Carlo simulation, we partition space into a number of bins in an appropriate range where the wave function is large. The bin size can be chosen small to get finer details of the density, but will require more data to mitigate statistical error.
 
-the one-body density is obtained by integrating the modulus squared with respect to all but the first spatial coordinates,
-
-\begin{equation}
-	\rho(\vec{x}_1) = \int d \vec{x}_2... d \vec{x}_N|\psi(\vec{x}_1, \vec{x}_2, ..., \vec{x}_N)|^2
-\end{equation}
-
-The one-body density gives the average particle density at any given spatial location. It is conceptually important to investigate, since it contains essential information about the system and can be found experimentally, unlike the whole wave function.
-
-To extract a one-body density from a Monte-Carlo simulation, we partition space into a number of bins in an appropriate range where the wave function is large. For each particle configuration produced at every Metropolis step, the number of particles coinciding with each bin is checked. The one-body density is then produced by averaging over all Metropolis steps. 
+For each particle configuration produced at every Metropolis step, the number of particles coinciding with each bin is checked. The one-body density is then produced by averaging over all Metropolis steps.
 
 
 %%% Local Variables:
