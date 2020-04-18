@@ -16,15 +16,16 @@
 % \makeatother
 
 \begin{abstract}
-We investigate a hardshell boson system in an elliptical harmonic oscillator using VMC with and without importance sampling. We use the trial wave function 
-	\begin{equation*}
-	\Psi_{T}(\vb{r}, \alpha, \beta, a) = \exp{-\alpha\sum_{i=1}^{N}\left( x_{i}^{2} + y^{2}_{i} + \beta z^{2}_{i} \right)}
-	\prod_{i<j}^{N}f(a, \vb{r}_{i}, \vb{r}_{j})
-\end{equation*} 
+A hard shell bosonic system in an elliptical harmonic oscillator investigated
+using variational Monte Carlo, with and without importance sampling. The
+variational parameter was optimized by gradient descent. Blocking is used to hinder underestimation of the
+statistical error due to correlated data, as popularized by \cite{Blocking}. 
 
-where $f(a, \vb{r}_{i}, \vb{r}_{j}) = 1 - \frac{a}{\abs{r_{i}-r_{j}}}$ if $|r_i - r_j|>a$, and zero else. 
+For $\beta = 2.82843$, $a = 0.0043$, the ground state energy was found to be
+\(24.3985 \pm 0.0011\), \(127.37 \pm 0.035\) and \(265.69 \pm 0.27\), for 10, 50
+and 100 bosons, respectively. Importance sampling was shown to be more efficient
+than brute force sampling, in the sense that it created less correlated data and
+converged faster to the physical solution. The one-body density was shown to widen for a increasing number of particles,
+indicating that the hard shell potential behaves repulsively, as expected.
 
-Popularized by \cite{Blocking}, we use blocking to hinder underestimation of the statistical error in our calculations due to correlated data. To optimize $\alpha$, gradient decent was used to minimize the energy.
-
-For $\beta = 2.82843$, $a = 0.0043$, the ground state energy was found to be \(24.3985 \pm 0.0011\), \(127.37 \pm 0.035\) and \(265.69 \pm 0.27\), for 10, 50 and 100 bosons, respectively. Importance sampling was shown to be more efficient than brute force sampling, in the sense that it created less correlated data. The one-body density was shown to widen for a increasing number of particles, indicating that the hardshell potential behaves repulsively, as expected.
 \end{abstract}
